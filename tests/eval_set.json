@@ -1,0 +1,205 @@
+[
+  {
+    "id": "pers_01",
+    "text": "What color dress suits my dark skin tone?",
+    "expected_intent": "personalization",
+    "category": "standard",
+    "notes": "Classic skin-tone match request"
+  },
+  {
+    "id": "pers_02",
+    "text": "Does emerald green look good on warm golden undertones?",
+    "expected_intent": "personalization",
+    "category": "undertone_inquiry",
+    "notes": "Specific undertone and color compatibility"
+  },
+  {
+    "id": "pers_03",
+    "text": "I need an outfit recommendation for an evening gala that compliments olive skin.",
+    "expected_intent": "personalization",
+    "category": "styling_inquiry",
+    "notes": "Tone-based outfit styling request"
+  },
+  {
+    "id": "pers_04",
+    "text": "Which shade matches me best?",
+    "expected_intent": "personalization",
+    "category": "short_direct",
+    "notes": "Short personalization question"
+  },
+  {
+    "id": "pers_05",
+    "text": "what colur suit my undertone? i want to look pop",
+    "expected_intent": "personalization",
+    "category": "typos_and_slang",
+    "notes": "Common typos and informal slang"
+  },
+  {
+    "id": "pers_06",
+    "text": "Wetin go match my dark complexion abeg?",
+    "expected_intent": "personalization",
+    "category": "code_switching_pidgin",
+    "notes": "Nigerian Pidgin tone-matching inquiry"
+  },
+  {
+    "id": "pers_07",
+    "text": "Which color gown go fit my tone properly?",
+    "expected_intent": "personalization",
+    "category": "code_switching_pidgin",
+    "notes": "Pidgin dress styling question"
+  },
+  {
+    "id": "pers_08",
+    "text": "Can you tell me if pastels look washed out on fair skin?",
+    "expected_intent": "personalization",
+    "category": "color_suitability",
+    "notes": "Fair skin pastel compatibility"
+  },
+  {
+    "id": "pers_09",
+    "text": "I want to know what clothes suit rich brown skin.",
+    "expected_intent": "personalization",
+    "category": "melanin_styling",
+    "notes": "Rich brown skin tone inquiry"
+  },
+  {
+    "id": "pers_10",
+    "text": "Do you have dresses that look flattering on cool pink undertones?",
+    "expected_intent": "personalization",
+    "category": "undertone_catalog",
+    "notes": "Undertone flattering catalog query"
+  },
+  {
+    "id": "gen_01",
+    "text": "Hello, good morning!",
+    "expected_intent": "general",
+    "category": "greeting",
+    "notes": "Standard conversational greeting"
+  },
+  {
+    "id": "gen_02",
+    "text": "What are your opening hours on weekends?",
+    "expected_intent": "general",
+    "category": "store_hours",
+    "notes": "Business hours question"
+  },
+  {
+    "id": "gen_03",
+    "text": "How much does delivery cost to Port Harcourt?",
+    "expected_intent": "general",
+    "category": "shipping_inquiry",
+    "notes": "Logistics and shipping pricing"
+  },
+  {
+    "id": "gen_04",
+    "text": "Where is your physical boutique located in Lagos?",
+    "expected_intent": "general",
+    "category": "location_inquiry",
+    "notes": "Physical store address question"
+  },
+  {
+    "id": "gen_05",
+    "text": "What is your return and exchange policy?",
+    "expected_intent": "general",
+    "category": "store_policy",
+    "notes": "Policy question"
+  },
+  {
+    "id": "gen_06",
+    "text": "Do you accept card payments or bank transfer?",
+    "expected_intent": "general",
+    "category": "payment_inquiry",
+    "notes": "Payment methods question"
+  },
+  {
+    "id": "gen_07",
+    "text": "Una dey open today?",
+    "expected_intent": "general",
+    "category": "code_switching_pidgin",
+    "notes": "Pidgin business hours inquiry"
+  },
+  {
+    "id": "gen_08",
+    "text": "How much be shipping to Ikeja?",
+    "expected_intent": "general",
+    "category": "code_switching_pidgin",
+    "notes": "Pidgin shipping cost question"
+  },
+  {
+    "id": "gen_09",
+    "text": "Do you have any new arrivals in stock this week?",
+    "expected_intent": "general",
+    "category": "inventory_overview",
+    "notes": "General inventory inquiry without personalization ask"
+  },
+  {
+    "id": "esc_01",
+    "text": "I want to speak to a real person right now.",
+    "expected_intent": "escalation",
+    "category": "explicit_human_request",
+    "notes": "Direct human representative demand"
+  },
+  {
+    "id": "esc_02",
+    "text": "Connect me to a customer care agent please.",
+    "expected_intent": "escalation",
+    "category": "explicit_human_request",
+    "notes": "Formal customer care request"
+  },
+  {
+    "id": "esc_03",
+    "text": "My package arrived completely torn and the dress is stained. This is unacceptable!",
+    "expected_intent": "escalation",
+    "category": "damaged_goods_complaint",
+    "notes": "Damaged goods dispute"
+  },
+  {
+    "id": "esc_04",
+    "text": "I was debited twice for my order and I demand an immediate refund.",
+    "expected_intent": "escalation",
+    "category": "billing_dispute",
+    "notes": "Financial dispute and refund demand"
+  },
+  {
+    "id": "esc_05",
+    "text": "Your company is a scam, nobody is answering my calls and you took my money!",
+    "expected_intent": "escalation",
+    "category": "anger_scam_accusation",
+    "notes": "Fraud accusation and anger"
+  },
+  {
+    "id": "esc_06",
+    "text": "Oh wonderful, another useless AI bot that wastes my time while my issue stays unresolved.",
+    "expected_intent": "escalation",
+    "category": "sarcasm_frustration",
+    "notes": "Sarcastic complaint against bot assistance"
+  },
+  {
+    "id": "esc_07",
+    "text": "I wanted to know what dress suits my skin tone, but your courier was so rude and damaged my gate so I want to report him to your manager immediately.",
+    "expected_intent": "escalation",
+    "category": "mixed_intent_priority",
+    "notes": "Mixed intent: mentions tone, but has high-severity complaint. Must escalate!"
+  },
+  {
+    "id": "esc_08",
+    "text": "Abeg transfer me give human being, I no get strength for robot.",
+    "expected_intent": "escalation",
+    "category": "code_switching_pidgin",
+    "notes": "Pidgin human escalation request"
+  },
+  {
+    "id": "esc_09",
+    "text": "This una service na pure scam and fraud, wetin be this nonsense!",
+    "expected_intent": "escalation",
+    "category": "code_switching_pidgin",
+    "notes": "Pidgin scam accusation and grievance"
+  },
+  {
+    "id": "esc_10",
+    "text": "Stop sending automated bot messages and get someone who can actually resolve this.",
+    "expected_intent": "escalation",
+    "category": "frustration_agent_demand",
+    "notes": "Demanding human intervention over automated messages"
+  }
+]

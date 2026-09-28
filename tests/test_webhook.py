@@ -33,6 +33,7 @@ def setup_test_env():
     settings.whatsapp_app_secret = TEST_APP_SECRET
     settings.whatsapp_phone_number_id = "10987654321"
     settings.whatsapp_token = "mock_token"
+    settings.stage = 1
 
 
 def compute_signature(payload_bytes: bytes, secret: str = TEST_APP_SECRET) -> str:
@@ -220,3 +221,105 @@ async def test_receive_valid_message_sends_fixed_reply():
             to="2348012345678",
             text=STAGE_1_ACK_MESSAGE,
         )
+
+
+@pytest.mark.asyncio
+async def test_receive_stage_2_routes_personalization_intent():
+    """In Stage 2, a skin tone inquiry triggers personalization selfie prompt."""
+    settings.stage = 2
+    inbound_payload = {
+        "object": "whatsapp_business_account",
+        "entry": [
+            {
+                "id": "12345678",
+                "changes": [
+                    {
+                        "value": {
+                            "messaging_product": "whatsapp",
+                            "messages": [
+                                {
+                                    "from": "2348012345678",
+                                    "id": "wamid.HBgLMTE1Nzg=",
+                                    "timestamp": "1720000000",
+                                    "text": {"body": "What color dress suits my dark skin tone?"},
+                                    "type": "text",
+                                }
+                            ],
+                        },
+                        "field": "messages",
+                    }
+                ],
+            }
+        ],
+    }
+    payload_bytes = json.dumps(inbound_payload).encode("utf-8")
+    valid_sig = compute_signature(payload_bytes)
+
+    with patch("app.main.whatsapp_client.send_text_message", new_callable=AsyncMock) as mock_send:
+        mock_send.return_value = {"messages": [{"id": "wamid.outbound123"}]}
+
+        response = client.post(
+            "/webhook",
+            content=payload_bytes,
+            headers={
+                "Content-Type": "application/json",
+                "X-Hub-Signature-256": valid_sig,
+            },
+        )
+
+        assert response.status_code == 200
+        assert mock_send.call_count == 1
+        call_args = mock_send.call_args[1]
+        assert call_args["to"] == "2348012345678"
+        assert "selfie" in call_args["text"].lower() or "photo" in call_args["text"].lower()
+
+
+@pytest.mark.asyncio
+async def test_receive_stage_2_routes_escalation_intent():
+    """In Stage 2, a complaint triggers immediate escalation response."""
+    settings.stage = 2
+    inbound_payload = {
+        "object": "whatsapp_business_account",
+        "entry": [
+            {
+                "id": "12345678",
+                "changes": [
+                    {
+                        "value": {
+                            "messaging_product": "whatsapp",
+                            "messages": [
+                                {
+                                    "from": "2348012345678",
+                                    "id": "wamid.HBgLMTE1Nzg=",
+                                    "timestamp": "1720000000",
+                                    "text": {"body": "I demand an immediate refund for damaged goods!"},
+                                    "type": "text",
+                                }
+                            ],
+                        },
+                        "field": "messages",
+                    }
+                ],
+            }
+        ],
+    }
+    payload_bytes = json.dumps(inbound_payload).encode("utf-8")
+    valid_sig = compute_signature(payload_bytes)
+
+    with patch("app.main.whatsapp_client.send_text_message", new_callable=AsyncMock) as mock_send:
+        mock_send.return_value = {"messages": [{"id": "wamid.outbound123"}]}
+
+        response = client.post(
+            "/webhook",
+            content=payload_bytes,
+            headers={
+                "Content-Type": "application/json",
+                "X-Hub-Signature-256": valid_sig,
+            },
+        )
+
+        assert response.status_code == 200
+        assert mock_send.call_count == 1
+        call_args = mock_send.call_args[1]
+        assert call_args["to"] == "2348012345678"
+        assert "human support team" in call_args["text"].lower() or "agent" in call_args["text"].lower()

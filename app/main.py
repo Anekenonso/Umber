@@ -16,19 +16,39 @@ from fastapi.responses import PlainTextResponse
 from app.config import settings
 from app.events import log_event
 from app.clients.whatsapp import WhatsAppClient
+from app.classifier import classify_intent
+from app.states import Intent
 
 logger = logging.getLogger("umber.webhook")
 
 app = FastAPI(
     title="Umber - WhatsApp Webhook Server",
     description="Webhook server handling Meta WhatsApp Cloud API webhooks.",
-    version="0.1.0",
+    version="0.2.0",
 )
 
 whatsapp_client = WhatsAppClient()
 
 # Stage 1 static acknowledgment message
 STAGE_1_ACK_MESSAGE = "Thank you for reaching out to Umber! We have received your message."
+
+# Stage 2 intent-driven responses
+STAGE_2_REPLIES = {
+    Intent.PERSONALIZATION: (
+        "We'd love to help you find the perfect outfit for your skin tone! "
+        "Please send a clear, forward-facing photo or selfie in good lighting, "
+        "and we'll analyze your palette and recommend matching pieces."
+    ),
+    Intent.GENERAL: (
+        "Thanks for messaging Umber! We specialize in personalized fashion recommendations "
+        "tailored to your unique complexion and style. For pricing, shipping, or catalog inquiries, "
+        "feel free to ask, or send a selfie to try on our collection!"
+    ),
+    Intent.ESCALATION: (
+        "We apologize for any trouble you've experienced. We have flagged your request for "
+        "our human support team, and an agent will be with you shortly."
+    ),
+}
 
 
 @app.get("/")
@@ -40,7 +60,7 @@ async def root(
     """Root endpoint. If Meta sends handshake to / instead of /webhook, handle it seamlessly."""
     if hub_mode == "subscribe":
         return await verify_webhook(hub_mode, hub_challenge, hub_verify_token)
-    return {"app": "Umber", "status": "running", "stage": 1}
+    return {"app": "Umber", "status": "running", "stage": settings.stage}
 
 
 @app.post("/")
@@ -172,15 +192,24 @@ async def receive_webhook(
                     "text": body_text,
                 })
 
-                # Stage 1: Send one fixed acknowledgment
                 if sender_id:
                     try:
+                        if settings.stage == 1:
+                            reply_text = STAGE_1_ACK_MESSAGE
+                        else:
+                            # Stage 2: Intent classification & intelligent routing
+                            classification = classify_intent(body_text)
+                            reply_text = STAGE_2_REPLIES.get(
+                                classification.intent,
+                                STAGE_2_REPLIES[Intent.GENERAL],
+                            )
+
                         await whatsapp_client.send_text_message(
                             to=sender_id,
-                            text=STAGE_1_ACK_MESSAGE,
+                            text=reply_text,
                         )
                     except Exception as e:
-                        logger.error(f"Failed to send acknowledgment to {sender_id}: {e}")
+                        logger.error(f"Failed to send reply to {sender_id}: {e}")
 
     # Meta expects 200 OK fast
     return {"status": "ok"}

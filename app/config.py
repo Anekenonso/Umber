@@ -29,6 +29,18 @@ class Settings:
         self._whatsapp_api_version: Optional[str] = None
         self._youcam_api_key: Optional[str] = None
         self._youcam_base_url: Optional[str] = None
+        self._stage: Optional[int] = None
+
+    @property
+    def stage(self) -> int:
+        if self._stage is not None:
+            return self._stage
+        reload_env()
+        return int(os.getenv("STAGE", "2"))
+
+    @stage.setter
+    def stage(self, val: int):
+        self._stage = val
 
     @property
     def whatsapp_token(self) -> str:

@@ -10,7 +10,7 @@ import json
 import logging
 from typing import Any, Dict, Optional
 
-from fastapi import FastAPI, Header, HTTPException, Query, Request, Response
+from fastapi import FastAPI, Header, Query, Request, Response
 from fastapi.responses import PlainTextResponse
 
 from app.config import settings
@@ -32,8 +32,24 @@ STAGE_1_ACK_MESSAGE = "Thank you for reaching out to Umber! We have received you
 
 
 @app.get("/")
-async def root():
+async def root(
+    hub_mode: Optional[str] = Query(None, alias="hub.mode"),
+    hub_challenge: Optional[str] = Query(None, alias="hub.challenge"),
+    hub_verify_token: Optional[str] = Query(None, alias="hub.verify_token"),
+):
+    """Root endpoint. If Meta sends handshake to / instead of /webhook, handle it seamlessly."""
+    if hub_mode == "subscribe":
+        return await verify_webhook(hub_mode, hub_challenge, hub_verify_token)
     return {"app": "Umber", "status": "running", "stage": 1}
+
+
+@app.post("/")
+async def root_post(
+    request: Request,
+    x_hub_signature_256: Optional[str] = Header(None, alias="X-Hub-Signature-256"),
+):
+    """Fallback if webhook URL in Meta is configured as / instead of /webhook."""
+    return await receive_webhook(request, x_hub_signature_256)
 
 
 @app.get("/health")

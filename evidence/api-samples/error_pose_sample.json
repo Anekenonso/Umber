@@ -1,0 +1,13 @@
+{
+  "task_id": "mock_task_skin_err_01",
+  "task_type": "skin-tone-analysis",
+  "status": "error",
+  "error": {
+    "code": "error_pose",
+    "message": "Face pose angle exceeded threshold. Please ensure face is facing directly toward the camera.",
+    "stage": "preprocessing"
+  },
+  "created_at": "2026-09-28T16:05:00Z",
+  "failed_at": "2026-09-28T16:05:01Z",
+  "customer_fallback_message": "Could you take a quick photo looking straight at the camera? Angled selfies can throw off our tone analysis."
+}

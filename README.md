@@ -1,7 +1,7 @@
 # Umber — AI Sales Assistant for Small Retailers
 
 > **Hackathon Submission:** YouCam API Skin AI & eCommerce VTO Hackathon (Perfect Corp / Devpost)  
-> **Status:** Stage 2 Completed (Intent Classification, Explicit State Machine, Nigerian Pidgin & Edge Case Handling, 100% Escalation Recall).
+> **Status:** All 6 Stages Complete (Plumbing, Classification, Skin AI, VTO Render, Escalations, Evidence Packaging & Status Dashboard). 41/41 Tests Passing.
 
 ---
 
@@ -39,15 +39,13 @@ WhatsApp Cloud API ──webhook──► app/main.py  (verify HMAC signature, p
 
 ---
 
-## Progress by Stage
+## Progress Across All Stages
 
 ### Stage 1 — Webhook Plumbing & Security
 - [x] Restructured repository layout into clean modular architecture (`app/`, `clients/`, `catalog/`, `tests/`, `evidence/`).
 - [x] Implemented Meta WhatsApp subscription verification handshake (`GET /webhook` and root fallback).
 - [x] Implemented HMAC-SHA256 constant-time request signature verification (`POST /webhook`) using `X-Hub-Signature-256`.
 - [x] Implemented quiet status update filtering (delivered/read receipts ignored with HTTP 200).
-- [x] Inbound message reception with static acknowledgment dispatch.
-- [x] Built deterministic catalog matcher and 15-SKU curated collection.
 - [x] Phase 13 structured event logging to `evidence/logs/events.log`.
 
 ### Stage 2 — Intent Classification & Conversation States
@@ -56,7 +54,28 @@ WhatsApp Cloud API ──webhook──► app/main.py  (verify HMAC signature, p
 - [x] Phase 9 failure rules: automatic fallback to human escalation on ambiguous/uncertain inputs (never bury complaints).
 - [x] Multi-dialect & Nigerian Pidgin code-switching support (*"Wetin go match my dark complexion abeg?"*, *"Una dey open today?"*, *"Abeg transfer me give human being"*).
 - [x] Phase 12 labeled evaluation benchmark (`tests/eval_set.json`): **100% overall accuracy**, **100% escalation recall**.
-- [x] Full test suite: **23/23 tests passing** (`tests/test_classifier.py`, `tests/test_webhook.py`, `tests/test_logic.py`).
-- [x] Webhook integration: dynamic intent-driven routing (`personalization` -> selfie prompt, `general` -> store FAQ assistance, `escalation` -> human handoff).
 
-For setup instructions, see [SETUP.md](SETUP.md).
+### Stage 3 — Skin-Tone Analysis & Selfie Request Flow
+- [x] Lightweight SQLite conversation store (`app/store.py`) tracking per-thread state and photo retries.
+- [x] Graph API media downloader (`get_media_url`) for customer selfies.
+- [x] Perfect Corp Facial Color Tones Analyzer integration (`task_type: skin-tone-analysis`).
+- [x] Phase 9 error handling: 1 polite retake request on `error_pose` / bad angle before graceful fallback.
+- [x] Phase 14 polling constraints (capped at 30 seconds / 15 attempts).
+
+### Stage 4 — Catalog Matching & VTO Confirmation Render (`cloth-v4`)
+- [x] Deterministic scoring in `app/catalog/matcher.py` ranking items by undertone, tone depth, and visual RGB contrast.
+- [x] YouCam Clothes Changer (`task_type: cloth-v4`) virtual try-on render dispatch.
+- [x] Dual-mode reply: WhatsApp Image message with confirmation render on success; graceful text-only recommendation on render failure or timeout (never stalls).
+- [x] Post-recommendation interactions: alternative color cycling and dissatisfaction escalation.
+
+### Stage 5 — Escalation Rules & State Persistence Hardening
+- [x] All 3 escalation triggers implemented and tested: human requests, complaints, and dissatisfaction.
+- [x] Post-escalation lockout guard: zero YouCam units burned and zero automated styling loops while under human review.
+- [x] SQLite state persistence verified across process restarts.
+- [x] Staff escalation dashboard (`GET /sessions/escalations`) and resolution endpoint (`POST /sessions/{sender_id}/resolve`).
+
+### Stage 6 — Evidence Packaging & Production Smoke Test
+- [x] Sleek judge status dashboard served at `GET /` displaying system health, architecture, and live catalog.
+- [x] Evidence surface populated (`evidence/logs/`, `evidence/eval-results/`, `evidence/api-samples/`).
+- [x] Complete test suite passing: **41 / 41 tests passing**.
+- [x] Production smoke test checklist documented in [SETUP.md](SETUP.md).

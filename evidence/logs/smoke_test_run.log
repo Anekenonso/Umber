@@ -1,0 +1,25 @@
+﻿
+=================================================================
+  UMBER -- PRODUCTION SMOKE TEST (STAGE 6)
+  YouCam API Skin AI & eCommerce VTO Hackathon (Devpost)
+=================================================================
+
+ [PASS]  Step 1: Judge Landing Dashboard & Health API
+         > GET / -> 200, GET /health -> {'status': 'ok'}
+ [PASS]  Step 2: Meta Webhook Verification Handshake
+         > hub.challenge echo returned judge_challenge_998811
+ [PASS]  Step 3: HMAC-SHA256 Signature Security Verification
+         > Invalid -> 403 Forbidden; Valid -> 200 OK
+ [PASS]  Step 4: Zero-Cost General Inquiry Classification
+         > Intent: general (YouCam API calls = 0)
+ [PASS]  Step 5: Pidgin Code-Switching & Dialect Robustness
+         > Personalization detected; Human handoff correctly flagged (explicit_human_request)
+ [PASS]  Step 6: Deterministic Skin-Tone Catalog Matching
+         > Deep tone -> Ochre Tailored Blazer (UMB-BLZ-04); Fair tone -> Olive Utility Shirt Dress (UMB-DRS-06)
+ [PASS]  Step 7: Escalation Queue, Lockout & Staff Resolution Workflow
+         > Queue listing -> 200, Resolve -> GENERAL_REPLY, Persisted in SQLite
+-----------------------------------------------------------------
+  ALL 7 PRODUCTION SMOKE TEST PHASES PASSED (0.53s)
+  System is fully hardened and ready for judge review!
+=================================================================
+

@@ -89,9 +89,35 @@ cloudflared tunnel --url http://localhost:8000
 
 ## 6. Running Tests
 
-Run the full mocked test suite (webhook security, signatures, status handling, polling caps, error mapping, and deterministic matching):
+Run the complete test suite (intent classification, webhook security, polling caps, YouCam error codes, catalog matching, VTO flow, and escalation states):
 ```bash
-python -m pytest tests/ -v
+pytest -v
 ```
 
-Execution evidence is automatically saved in `evidence/logs/`.
+Execution evidence is automatically logged to `evidence/logs/events.log` and individual stage logs in `evidence/logs/`.
+
+---
+
+## 7. Production Smoke Test (Phase 21 Checklist)
+
+You can run the automated end-to-end smoke test suite against either the local application or your deployed public URL:
+
+```bash
+# Automated 7-step smoke test
+python scripts/smoke_test.py
+
+# Or against a deployed production URL
+python scripts/smoke_test.py --url https://<your-public-url>
+```
+
+The smoke test validates:
+1. **Public Reachability & UI Dashboard**: Verifies `GET /` (Judge Dashboard) and `GET /health` (`{"status": "ok"}`).
+2. **Meta Webhook Handshake**: Verifies `GET /webhook` echo challenge.
+3. **HMAC-SHA256 Security**: Rejects invalid signatures with 403 Forbidden; validates proper signatures.
+4. **Zero-Cost Routing**: Validates general store questions never trigger YouCam API calls.
+5. **Pidgin Code-Switching**: Validates multi-dialect and Nigerian Pidgin intent classification and 100% human handoff recall.
+6. **Deterministic Tone Match**: Validates code-only tone depth and undertone matching without LLM hallucination.
+7. **Escalation Lockout & Staff Resolution**: Validates lockout enforcement, queue listing at `GET /sessions/escalations`, and resolution via `POST /sessions/{sender_id}/resolve`.
+
+Audit trail and execution results are saved to `evidence/logs/smoke_test_run.log`.
+

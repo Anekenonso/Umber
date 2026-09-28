@@ -1,0 +1,14 @@
+{
+  "task_id": "mock_task_vto_45678",
+  "task_type": "cloth-v4",
+  "status": "success",
+  "result": {
+    "result_url": "https://media.youcam.net/vto/rendered_outfit_terracotta_midi.jpg",
+    "output_image_url": "https://media.youcam.net/vto/rendered_outfit_terracotta_midi.jpg",
+    "generation_time_seconds": 2.4,
+    "applied_sku": "UMB-DRS-01"
+  },
+  "created_at": "2026-09-28T16:00:04Z",
+  "completed_at": "2026-09-28T16:00:07Z",
+  "billed_units": 2
+}

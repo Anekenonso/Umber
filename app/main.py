@@ -10,8 +10,9 @@ import json
 import logging
 from typing import Any, Dict, Optional
 
+from pathlib import Path
 from fastapi import FastAPI, Header, Query, Request, Response
-from fastapi.responses import PlainTextResponse
+from fastapi.responses import HTMLResponse, PlainTextResponse
 
 from app.clients.whatsapp import WhatsAppClient
 from app.config import settings
@@ -19,6 +20,8 @@ from app.events import log_event
 from app.classifier import classify_intent
 from app.states import Intent
 from app.orchestrator import Orchestrator
+
+TEMPLATE_PATH = Path(__file__).resolve().parent / "templates" / "index.html"
 
 logger = logging.getLogger("umber.webhook")
 
@@ -62,6 +65,9 @@ async def root(
     """Root endpoint. If Meta sends handshake to / instead of /webhook, handle it seamlessly."""
     if hub_mode == "subscribe":
         return await verify_webhook(hub_mode, hub_challenge, hub_verify_token)
+    if TEMPLATE_PATH.exists():
+        with open(TEMPLATE_PATH, "r", encoding="utf-8") as f:
+            return HTMLResponse(content=f.read(), status_code=200)
     return {"app": "Umber", "status": "running", "stage": settings.stage}
 
 

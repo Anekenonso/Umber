@@ -1,0 +1,20 @@
+{
+  "task_id": "mock_task_skin_78910",
+  "task_type": "skin-tone-analysis",
+  "status": "success",
+  "result": {
+    "skin_color": "#8D5524",
+    "undertone": "warm",
+    "depth": "deep",
+    "confidence": 0.96,
+    "metrics": {
+      "r": 141,
+      "g": 85,
+      "b": 36,
+      "estimated_fitzpatrick": 5
+    }
+  },
+  "created_at": "2026-09-28T16:00:00Z",
+  "completed_at": "2026-09-28T16:00:03Z",
+  "billed_units": 20
+}

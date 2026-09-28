@@ -35,8 +35,11 @@ from app.store import store
 def clean_database():
     """Ensure clean isolated SQLite state store for every test."""
     store.clear_all()
+    original_stage = settings.stage
+    settings.stage = 3
     yield
     store.clear_all()
+    settings.stage = original_stage
 
 
 @pytest.mark.asyncio

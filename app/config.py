@@ -36,7 +36,7 @@ class Settings:
         if self._stage is not None:
             return self._stage
         reload_env()
-        return int(os.getenv("STAGE", "2"))
+        return int(os.getenv("STAGE", "6"))
 
     @stage.setter
     def stage(self, val: int):

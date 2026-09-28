@@ -23,10 +23,33 @@ class WhatsAppClient:
         phone_number_id: Optional[str] = None,
         api_version: Optional[str] = None,
     ):
-        self.token = token or settings.whatsapp_token
-        self.phone_number_id = phone_number_id or settings.whatsapp_phone_number_id
-        self.api_version = api_version or settings.whatsapp_api_version
-        self.base_url = f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/messages"
+        self._token = token
+        self._phone_number_id = phone_number_id
+        self._api_version = api_version
+
+    @property
+    def token(self) -> str:
+        return self._token or settings.whatsapp_token
+
+    @token.setter
+    def token(self, val: str):
+        self._token = val
+
+    @property
+    def phone_number_id(self) -> str:
+        return self._phone_number_id or settings.whatsapp_phone_number_id
+
+    @phone_number_id.setter
+    def phone_number_id(self, val: str):
+        self._phone_number_id = val
+
+    @property
+    def api_version(self) -> str:
+        return self._api_version or settings.whatsapp_api_version
+
+    @property
+    def base_url(self) -> str:
+        return f"https://graph.facebook.com/{self.api_version}/{self.phone_number_id}/messages"
 
     def _get_headers(self) -> Dict[str, str]:
         return {

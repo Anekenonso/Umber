@@ -64,6 +64,7 @@ PERSONALIZATION_SIGNALS = [
 GENERAL_SIGNALS = [
     r"\b(hello|hi|hey|good\s+morning|good\s+afternoon|good\s+evening|how\s+far)\b",
     r"\b(store\s+hours|business\s+hours|opening\s+hours|hours|open\s+today|what\s+time\s+do\s+you\s+open|closing\s+time|una\s+dey\s+open)\b",
+    r"\b((when\s+(are\s+you|are\s+una|una\s+dey)\s+)?(free|open|available)\s+on\s+(monday|tuesday|wednesday|thursday|friday|saturday|sunday|weekend)|when\s+are\s+you\s+(free|open|available))\b",
     r"\b(shipping|delivery|deliver\s+to|shipping\s+to|how\s+much\s+(be\s+shipping|does\s+delivery|is\s+delivery|una\s+dey\s+sell))\b",
     r"\b(where\s+(is|are)\s+your\s+(physical\s+)?(store|boutique|shop)|located\s+in)\b",
     r"\b(return\s+(and\s+exchange\s+)?policy|exchange\s+policy|store\s+policy)\b",

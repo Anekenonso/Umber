@@ -11,6 +11,7 @@ Enforces Phase 14 constraints:
 """
 import asyncio
 import logging
+import os
 from typing import Any, Dict, Optional
 import httpx
 
@@ -107,13 +108,30 @@ class YouCamClient:
         Cost: 20 units per successful call (errors are free).
         Returns undertone, skin_color, etc.
         """
+        log_event("SKIN_ANALYSIS_CALLED", {"image_url": image_url})
+
+        # Demo / Offline fallback if API key is not configured or in trial conservation mode
+        if self.api_key in ("your_youcam_api_key_here", "", None) or os.getenv("MOCK_YOUCAM") == "true":
+            await asyncio.sleep(1.0)
+            mock_result = {
+                "task_id": "demo_task_skin_tone_01",
+                "task_type": "skin-tone-analysis",
+                "status": "success",
+                "result": {
+                    "skin_color": "#8D5524",
+                    "undertone": "warm",
+                    "depth": "deep",
+                    "confidence": 0.96,
+                },
+            }
+            log_event("SKIN_ANALYSIS_SUCCEEDED", {"task_id": "demo_task_skin_tone_01", "result": mock_result})
+            return mock_result
+
         submit_url = f"{self.base_url}/task"
         payload = {
             "task_type": "skin-tone-analysis",
             "image_url": image_url,
         }
-
-        log_event("SKIN_ANALYSIS_CALLED", {"image_url": image_url})
 
         async with httpx.AsyncClient(timeout=10.0) as client:
             submit_resp = await client.post(
@@ -146,6 +164,25 @@ class YouCamClient:
         VERIFY: Exact result JSON field name for output image URL 
         (e.g., result_url vs output_image_url) to be confirmed on live sample.
         """
+        log_event("VTO_RENDER_CALLED", {
+            "src_image_url": src_image_url,
+            "garment_image_url": garment_image_url,
+        })
+
+        # Demo / Offline fallback if API key is not configured or in trial conservation mode
+        if self.api_key in ("your_youcam_api_key_here", "", None) or os.getenv("MOCK_YOUCAM") == "true":
+            await asyncio.sleep(1.5)
+            mock_result = {
+                "task_id": "demo_task_vto_01",
+                "task_type": "cloth-v4",
+                "status": "success",
+                "result": {
+                    "result_url": garment_image_url,
+                },
+            }
+            log_event("VTO_RENDER_SUCCEEDED", {"task_id": "demo_task_vto_01", "result": mock_result})
+            return mock_result
+
         submit_url = f"{self.base_url}/task"
         payload = {
             "task_type": "cloth-v4",

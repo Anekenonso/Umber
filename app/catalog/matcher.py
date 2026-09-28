@@ -51,6 +51,40 @@ def estimate_undertone_and_depth(r: int, g: int, b: int) -> Tuple[str, str]:
     return undertone, depth
 
 
+def format_skin_tone_description(hex_str: str, undertone: str) -> str:
+    """Format skin tone into natural, flattering plain words instead of raw hex.
+    
+    Examples:
+    - #8D5524 + warm -> 'rich warm bronze'
+    - #4A2D1A + warm -> 'deep rich chestnut'
+    - #C48858 + warm -> 'warm golden caramel'
+    - #F5E6D3 + cool -> 'fair rosy porcelain'
+    """
+    r, g, b = hex_to_rgb(hex_str)
+    estimated_undertone, depth = estimate_undertone_and_depth(r, g, b)
+    effective_undertone = undertone or estimated_undertone
+
+    tone_names = {
+        ("rich", "warm"): "rich warm bronze",
+        ("rich", "cool"): "rich cool espresso",
+        ("rich", "neutral"): "rich deep ebony",
+        ("deep", "warm"): "deep warm bronze",
+        ("deep", "cool"): "deep cool mocha",
+        ("deep", "neutral"): "deep neutral brown",
+        ("medium", "warm"): "warm golden caramel",
+        ("medium", "cool"): "medium cool olive",
+        ("medium", "neutral"): "medium neutral tan",
+        ("light", "warm"): "warm golden peach",
+        ("light", "cool"): "light rosy beige",
+        ("light", "neutral"): "light neutral beige",
+        ("fair", "warm"): "fair warm ivory",
+        ("fair", "cool"): "fair rosy porcelain",
+        ("fair", "neutral"): "fair neutral alabaster",
+    }
+
+    return tone_names.get((depth, effective_undertone), f"{depth} {effective_undertone}")
+
+
 class CatalogMatcher:
     """Deterministic product matcher matching skin tones to curated catalog items."""
 

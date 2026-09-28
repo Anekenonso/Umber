@@ -16,7 +16,11 @@ Operating Rules:
 import logging
 from typing import Any, Dict, Optional
 
-from app.catalog.matcher import CatalogMatcher, catalog_matcher
+from app.catalog.matcher import (
+    CatalogMatcher,
+    catalog_matcher,
+    format_skin_tone_description,
+)
 from app.classifier import classify_intent
 from app.clients.whatsapp import WhatsAppClient
 from app.clients.youcam import YouCamAPIError, YouCamClient, YouCamTimeoutError
@@ -296,8 +300,9 @@ class Orchestrator:
 
             if settings.stage <= 3:
                 # Stage 3 milestone behavior: confirm skin tone and stop at MATCHING
+                tone_desc = format_skin_tone_description(skin_color, undertone)
                 reply_text = (
-                    f"We analyzed your photo: detected skin tone {skin_color} with {undertone} undertones! "
+                    f"We analyzed your photo: detected a beautiful {tone_desc} complexion ({skin_color}) with {undertone} undertones! "
                     "Matching our catalog for your best picks..."
                 )
                 await self.whatsapp.send_text_message(sender_id, reply_text)
@@ -344,9 +349,10 @@ class Orchestrator:
         session.state = ConversationState.RENDERING
         store.save_session(session)
 
+        tone_desc = format_skin_tone_description(skin_color, undertone)
         caption_text = (
             f"Here is your personalized match: the {item['name']} ({item.get('price', '$85.00')})!\n\n"
-            f"Our analysis detected a {skin_color} complexion with {undertone} undertones. "
+            f"Our analysis detected a {tone_desc} complexion with {undertone} undertones. "
             f"{item.get('description', '')}\n\n"
             "Would you like to order this, or see another color option?"
         )
@@ -400,8 +406,9 @@ class Orchestrator:
                 "sku": item["sku"],
             })
 
+            tone_desc = format_skin_tone_description(skin_color, undertone)
             text_recommendation = (
-                f"Based on your {undertone} undertones and complexion, our top recommendation is the "
+                f"Based on your {tone_desc} complexion with {undertone} undertones, our top recommendation is the "
                 f"**{item['name']}** ({item.get('price', '$85.00')})!\n\n"
                 f"{item.get('description', '')}\n\n"
                 "(Our virtual try-on preview is temporarily unavailable, but this piece is an ideal shade match.)\n"

@@ -1,0 +1,18 @@
+{"timestamp": "2026-09-28T05:46:01.956767+00:00", "event": "HANDSHAKE_VERIFIED", "payload": {"mode": "subscribe"}}
+{"timestamp": "2026-09-28T05:46:01.983614+00:00", "event": "HANDSHAKE_REJECTED", "payload": {"mode": "subscribe", "token_match": false}}
+{"timestamp": "2026-09-28T05:46:02.000190+00:00", "event": "HANDSHAKE_REJECTED", "payload": {"mode": "publish", "token_match": true}}
+{"timestamp": "2026-09-28T05:46:02.017309+00:00", "event": "SIGNATURE_REJECTED", "payload": {"has_header": false, "header_preview": null}}
+{"timestamp": "2026-09-28T05:46:02.064593+00:00", "event": "SIGNATURE_REJECTED", "payload": {"has_header": true, "header_preview": "sha256=31640002"}}
+{"timestamp": "2026-09-28T05:46:02.083887+00:00", "event": "SIGNATURE_VERIFIED", "payload": {}}
+{"timestamp": "2026-09-28T05:46:02.088413+00:00", "event": "STATUS_UPDATE_RECEIVED", "payload": {"status_id": "wamid.HBgLMTE1Nzg", "recipient_id": "2348012345678", "status": "delivered"}}
+{"timestamp": "2026-09-28T05:46:02.109066+00:00", "event": "SIGNATURE_VERIFIED", "payload": {}}
+{"timestamp": "2026-09-28T05:46:02.110165+00:00", "event": "MESSAGE_RECEIVED", "payload": {"sender": "2348012345678", "message_id": "wamid.HBgLMTE1Nzg=", "type": "text", "text": "Hi, what color dress suits me?"}}
+{"timestamp": "2026-09-28T05:46:59.928210+00:00", "event": "HANDSHAKE_VERIFIED", "payload": {"mode": "subscribe"}}
+{"timestamp": "2026-09-28T05:46:59.942267+00:00", "event": "HANDSHAKE_REJECTED", "payload": {"mode": "subscribe", "token_match": false}}
+{"timestamp": "2026-09-28T05:46:59.954776+00:00", "event": "HANDSHAKE_REJECTED", "payload": {"mode": "publish", "token_match": true}}
+{"timestamp": "2026-09-28T05:46:59.968492+00:00", "event": "SIGNATURE_REJECTED", "payload": {"has_header": false, "header_preview": null}}
+{"timestamp": "2026-09-28T05:46:59.981608+00:00", "event": "SIGNATURE_REJECTED", "payload": {"has_header": true, "header_preview": "sha256=31640002"}}
+{"timestamp": "2026-09-28T05:46:59.994436+00:00", "event": "SIGNATURE_VERIFIED", "payload": {}}
+{"timestamp": "2026-09-28T05:46:59.994436+00:00", "event": "STATUS_UPDATE_RECEIVED", "payload": {"status_id": "wamid.HBgLMTE1Nzg", "recipient_id": "2348012345678", "status": "delivered"}}
+{"timestamp": "2026-09-28T05:47:00.027235+00:00", "event": "SIGNATURE_VERIFIED", "payload": {}}
+{"timestamp": "2026-09-28T05:47:00.027235+00:00", "event": "MESSAGE_RECEIVED", "payload": {"sender": "2348012345678", "message_id": "wamid.HBgLMTE1Nzg=", "type": "text", "text": "Hi, what color dress suits me?"}}

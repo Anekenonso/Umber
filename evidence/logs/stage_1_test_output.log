@@ -1,0 +1,21 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0
+rootdir: C:\Users\USER\Documents\Software Development\AI SaaS\Umber
+plugins: anyio-4.14.2, asyncio-1.4.0
+collected 13 items
+
+tests/test_logic.py::test_polling_loop_stops_at_cap PASSED               [  7%]
+tests/test_logic.py::test_documented_error_codes_raise_correctly PASSED  [ 15%]
+tests/test_logic.py::test_undocumented_error_code_fallback PASSED        [ 23%]
+tests/test_logic.py::test_catalog_matching_is_deterministic PASSED       [ 30%]
+tests/test_logic.py::test_catalog_matching_non_empty_across_tone_spectrum PASSED [ 38%]
+tests/test_logic.py::test_hex_to_rgb_conversion PASSED                   [ 46%]
+tests/test_webhook.py::test_handshake_success PASSED                     [ 53%]
+tests/test_webhook.py::test_handshake_failure_invalid_token PASSED       [ 61%]
+tests/test_webhook.py::test_handshake_failure_invalid_mode PASSED        [ 69%]
+tests/test_webhook.py::test_receive_missing_signature_header PASSED      [ 76%]
+tests/test_webhook.py::test_receive_invalid_signature PASSED             [ 84%]
+tests/test_webhook.py::test_receive_status_update_payload_quietly PASSED [ 92%]
+tests/test_webhook.py::test_receive_valid_message_sends_fixed_reply PASSED [100%]
+
+============================= 13 passed in 8.03s ==============================

@@ -1,0 +1,167 @@
+[
+  {
+    "sku": "UMB-DRS-01",
+    "name": "Terracotta Linen Midi Dress",
+    "category": "dress",
+    "undertone": "warm",
+    "tone_depth": "medium",
+    "hex": "#c45b38",
+    "garment_image_url": "https://images.unsplash.com/photo-1595777457583-95e059d581b8?w=800",
+    "price": "$85.00",
+    "description": "Rich terracotta earthy tone perfect for warm medium to deep skin tones."
+  },
+  {
+    "sku": "UMB-DRS-02",
+    "name": "Emerald Satin Slip Dress",
+    "category": "dress",
+    "undertone": "cool",
+    "tone_depth": "deep",
+    "hex": "#0f5a47",
+    "garment_image_url": "https://images.unsplash.com/photo-1568252542512-9fe8fe9c87bb?w=800",
+    "price": "$92.00",
+    "description": "Deep jewel-toned emerald providing striking contrast on deep and rich complexions."
+  },
+  {
+    "sku": "UMB-TOP-03",
+    "name": "Champagne Silk Camisole",
+    "category": "top",
+    "undertone": "neutral",
+    "tone_depth": "fair",
+    "hex": "#f5e6d3",
+    "garment_image_url": "https://images.unsplash.com/photo-1551803091-e20673f15770?w=800",
+    "price": "$48.00",
+    "description": "Delicate neutral champagne that flatters fair to light skin with gentle radiance."
+  },
+  {
+    "sku": "UMB-BLZ-04",
+    "name": "Ochre Tailored Blazer",
+    "category": "blazer",
+    "undertone": "warm",
+    "tone_depth": "deep",
+    "hex": "#c68b2c",
+    "garment_image_url": "https://images.unsplash.com/photo-1591047139829-d91aecb6caea?w=800",
+    "price": "$120.00",
+    "description": "Bold warm ochre that complements golden undertones across medium to rich skin tones."
+  },
+  {
+    "sku": "UMB-TOP-05",
+    "name": "Cobalt Ribbed Knit Top",
+    "category": "top",
+    "undertone": "cool",
+    "tone_depth": "fair",
+    "hex": "#1d4ed8",
+    "garment_image_url": "https://images.unsplash.com/photo-1503342217505-b0a15ec3261c?w=800",
+    "price": "$52.00",
+    "description": "High-contrast electric cobalt accentuating cool, pink, and fair undertones."
+  },
+  {
+    "sku": "UMB-DRS-06",
+    "name": "Olive Utility Shirt Dress",
+    "category": "dress",
+    "undertone": "warm",
+    "tone_depth": "olive",
+    "hex": "#556b2f",
+    "garment_image_url": "https://images.unsplash.com/photo-1572804013309-59a88b7e92f1?w=800",
+    "price": "$78.00",
+    "description": "Muted military olive that balances green and golden nuances in olive skin."
+  },
+  {
+    "sku": "UMB-BLZ-07",
+    "name": "Plum Velvet Blazer",
+    "category": "blazer",
+    "undertone": "cool",
+    "tone_depth": "rich",
+    "hex": "#4a154b",
+    "garment_image_url": "https://images.unsplash.com/photo-1584273143981-41c073dfe8f8?w=800",
+    "price": "$135.00",
+    "description": "Opulent deep plum creating a regal, glowing frame for deep and rich undertones."
+  },
+  {
+    "sku": "UMB-TOP-08",
+    "name": "Blush Organic Cotton Tee",
+    "category": "top",
+    "undertone": "neutral",
+    "tone_depth": "light",
+    "hex": "#f4c2c2",
+    "garment_image_url": "https://images.unsplash.com/photo-1521572267360-ee0c2909d518?w=800",
+    "price": "$38.00",
+    "description": "Soft muted blush that naturally harmonizes with light neutral complexions."
+  },
+  {
+    "sku": "UMB-DRS-09",
+    "name": "Mustard Wrap Maxi",
+    "category": "dress",
+    "undertone": "warm",
+    "tone_depth": "medium",
+    "hex": "#e1ad01",
+    "garment_image_url": "https://images.unsplash.com/photo-1515372039744-b8f02a3ae446?w=800",
+    "price": "$95.00",
+    "description": "Sun-drenched golden mustard designed for bronzed and warm medium skin."
+  },
+  {
+    "sku": "UMB-BLZ-10",
+    "name": "Navy Double-Breasted Jacket",
+    "category": "blazer",
+    "undertone": "cool",
+    "tone_depth": "neutral",
+    "hex": "#0a192f",
+    "garment_image_url": "https://images.unsplash.com/photo-1507679799987-c73779587ccf?w=800",
+    "price": "$115.00",
+    "description": "Timeless midnight navy offering crisp silhouette definition across all complexions."
+  },
+  {
+    "sku": "UMB-TOP-11",
+    "name": "Rust Linen Button-Down",
+    "category": "top",
+    "undertone": "warm",
+    "tone_depth": "rich",
+    "hex": "#a44222",
+    "garment_image_url": "https://images.unsplash.com/photo-1598033129183-c4f50c736f10?w=800",
+    "price": "$64.00",
+    "description": "Earthy copper rust that enhances deep melanin warmth and natural glow."
+  },
+  {
+    "sku": "UMB-DRS-12",
+    "name": "Sage Green Tiered Sun Dress",
+    "category": "dress",
+    "undertone": "neutral",
+    "tone_depth": "fair",
+    "hex": "#9caf88",
+    "garment_image_url": "https://images.unsplash.com/photo-1496747611176-843222e1e57c?w=800",
+    "price": "$72.00",
+    "description": "Subtle botanical sage green soothing fair to medium skin with neutral undertones."
+  },
+  {
+    "sku": "UMB-TOP-13",
+    "name": "Berry Ribbed Henley",
+    "category": "top",
+    "undertone": "cool",
+    "tone_depth": "medium",
+    "hex": "#8a1c4a",
+    "garment_image_url": "https://images.unsplash.com/photo-1503342394128-c104d54dba01?w=800",
+    "price": "$46.00",
+    "description": "Vibrant crushed berry that enlivens cool medium and olive complexions."
+  },
+  {
+    "sku": "UMB-BLZ-14",
+    "name": "Charcoal Houndstooth Blazer",
+    "category": "blazer",
+    "undertone": "cool",
+    "tone_depth": "fair",
+    "hex": "#36454f",
+    "garment_image_url": "https://images.unsplash.com/photo-1548883354-7622d03aca27?w=800",
+    "price": "$128.00",
+    "description": "Architectural cool charcoal creating high-fashion contrast on lighter tones."
+  },
+  {
+    "sku": "UMB-DRS-15",
+    "name": "Burnt Orange Silk Gown",
+    "category": "dress",
+    "undertone": "warm",
+    "tone_depth": "deep",
+    "hex": "#cc5500",
+    "garment_image_url": "https://images.unsplash.com/photo-1539109136881-3be0616acf4b?w=800",
+    "price": "$140.00",
+    "description": "Showstopping radiant burnt orange tailored specifically for deep and dark skin tones."
+  }
+]

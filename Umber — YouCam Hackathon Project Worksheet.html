@@ -1,0 +1,656 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}</style><style>:root{color-scheme:light dark;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}@media (prefers-color-scheme:dark){:root:where(:not([data-theme="light"])){--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}}:root[data-theme="dark"]{color-scheme:dark;--md-bg:#0d0d0d;--md-text:rgba(255,255,255,.85);--md-muted:rgba(255,255,255,.6);--md-fill:rgba(255,255,255,.06);--md-fill-strong:rgba(255,255,255,.09);--md-rule:rgba(255,255,255,.14);--md-rule-strong:rgba(255,255,255,.22);--md-link:hsl(210 100% 72%)}:root[data-theme="light"]{color-scheme:light}@media print{:root,:root[data-theme="dark"]{color-scheme:light;--md-bg:#fff;--md-text:rgba(0,0,0,.8);--md-muted:rgba(0,0,0,.6);--md-fill:rgba(0,0,0,.04);--md-fill-strong:rgba(0,0,0,.06);--md-rule:rgba(0,0,0,.1);--md-rule-strong:rgba(0,0,0,.16);--md-link:hsl(210 100% 45%)}}body{background:var(--md-bg);color:var(--md-text);max-width:720px;margin:0 auto;padding:32px;display:flex;flex-direction:column;gap:10px;font:14px/1.55 -apple-system,BlinkMacSystemFont,'SF Pro','Segoe UI',sans-serif;overflow-wrap:break-word}body>:first-child{margin-top:0}h1,h2,h3,h4,h5,h6{margin:6px 0 0;line-height:1.25;font-weight:600;text-wrap:balance}h1{font-size:1.35em}h2{font-size:1.15em;color:var(--md-muted)}h3,h4,h5,h6{font-size:1em}p,ul,ol,blockquote,table,pre,hr{margin:0}strong{font-weight:600}a{color:var(--md-link);text-decoration:none}a:hover{text-decoration:underline}ul,ol{display:flex;flex-direction:column;gap:6px;padding-left:22px}ul{list-style:disc}ol{list-style:decimal}:is(li,td,th)>*+:is(p,ul,ol,blockquote){margin-top:6px}blockquote{display:flex;flex-direction:column;gap:10px;border-left:2px solid var(--md-rule);padding-left:10px;color:var(--md-muted)}:not(pre)>code{background:var(--md-fill);padding:1px 3px;border-radius:4px;font:.92em 'SF Mono',ui-monospace,Menlo,Consolas,monospace}a>code{background:none;color:inherit}pre{background:var(--md-fill);padding:10px 12px;border-radius:6px;overflow-x:auto;font:12px/1.5 'SF Mono',ui-monospace,Menlo,Consolas,monospace;margin-block:4px}pre code{background:none;padding:0;font:inherit}table{width:100%;border-collapse:separate;border-spacing:2px;font:inherit}th,td{padding:6px 8px;border-radius:3px;text-align:left;vertical-align:top}th{background:var(--md-fill-strong);font-weight:600}td{background:var(--md-fill)}:is(th,td) :not(pre)>code{background:transparent}hr{border:0;border-top:1px solid var(--md-rule-strong);margin-block:10px}img{max-width:100%;height:auto;border-radius:4px}</style>
+</head><body>
+<h1>Umber — YouCam Hackathon Project Worksheet</h1>
+<p><strong>Project:</strong> Umber — AI Sales Assistant for Small Retailers (WhatsApp + YouCam VTO/Skin AI)
+<strong>Hackathon:</strong> YouCam API Skin AI &amp; eCommerce VTO Hackathon (Perfect Corp / Devpost), Sep 29 – Nov 2, 2026
+<strong>Framework:</strong> Kenneth's Software Engineering Playbook, Phases 1–8</p>
+<hr>
+<h2>Phase 1 — Start With the Problem</h2>
+<ul>
+<li><strong>Problem:</strong> Customers DM small retailers on Instagram/WhatsApp asking personalization questions (&quot;does this suit me?&quot;, &quot;what shade matches?&quot;), and with no one staffing live chat, replies take hours — by then the customer has moved on.</li>
+<li><strong>User:</strong> Solo/small-team boutique or beauty retailers selling through WhatsApp/Instagram.</li>
+<li><strong>Current alternative:</strong> Owner checks DMs when free, or a generic keyword/FAQ bot that can't answer visual-judgment questions.</li>
+<li><strong>Gap/pain:</strong> Average Instagram business response time is 10+ hours; 35% of customers expect a reply within an hour; 5-minute replies convert 21x higher than hour-plus ones. Keyword bots can't close that gap because &quot;what suits me&quot; needs visual judgment.</li>
+<li><strong>Solution:</strong> A WhatsApp agent that, on a personalization question, requests a selfie, runs YouCam skin-tone analysis, matches the merchant's real catalog deterministically, confirms the pick with a VTO render, and replies with both.</li>
+<li><strong>Technical thesis:</strong> Because YouCam can extract objective skin-tone data and generate a photorealistic confirmation, software can now close both the personalization gap and the purchase-confidence gap — not just recommend, but prove.</li>
+<li><strong>V1 non-goals:</strong> No checkout/payment. WhatsApp only, not Instagram. No full staff-handoff system — just a clear escalation flag. No live inventory sync — a small curated product list is fine for the demo.</li>
+</ul>
+<h2>Phase 2 — Define Success Criteria</h2>
+<ol>
+<li>Full round trip (inbound message → skin-tone call → catalog match → VTO render → reply) completes end-to-end for a valid request.</li>
+<li>Every documented image-failure error code from the kill test produces a graceful, specific fallback message — never a silent failure.</li>
+<li>All three escalation triggers (explicit human ask, complaint, &quot;not satisfied&quot; post-recommendation) fire correctly against a fixed test-message set.</li>
+<li>The general-question path never calls the YouCam API — cost stays at zero for non-personalization messages.</li>
+<li>The 15 deliberately-bad kill-test images each return the specific error code the docs promise.</li>
+</ol>
+<h2>Phase 3 — Map the Risks</h2>
+<table>
+<thead>
+<tr>
+<th>Risk</th>
+<th>Probability</th>
+<th>Impact</th>
+<th>How to test</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WhatsApp &lt;-&gt; YouCam round trip doesn't work smoothly together</td>
+<td>Medium</td>
+<td>High</td>
+<td>Build it first, day 1</td>
+</tr>
+<tr>
+<td>Customer never sends a selfie when asked</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Fallback: ask once more, then offer general picks</td>
+</tr>
+<tr>
+<td>Real-world selfies (bad lighting/angle) fail YouCam's checks often</td>
+<td>Medium</td>
+<td>High</td>
+<td>Test against non-studio photos early, not just clean ones</td>
+</tr>
+<tr>
+<td>Curated catalog too small/narrow to match varied skin tones convincingly</td>
+<td>Medium</td>
+<td>Medium</td>
+<td>Curate 15–20 SKUs spanning a real tone range before demo</td>
+</tr>
+<tr>
+<td>Meta test-number limits (5 verified recipients) constrain judge testing</td>
+<td>Low</td>
+<td>Medium</td>
+<td>Confirm judges can use a verified test number, or record video</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Highest-risk assumption:</strong> the WhatsApp &lt;-&gt; YouCam round trip actually working reliably and fast enough inside one message thread.
+<strong>Kill test:</strong> before anything else, wire the minimal path with one hardcoded photo and confirm a reply comes back in the same thread.</p>
+<h2>Phase 4 — Architecture Before UI</h2>
+<pre><code>Customer -&gt; WhatsApp Cloud API -&gt; Webhook -&gt; Agent orchestrator -&gt; [YouCam MCP tools] + [Catalog matcher] -&gt; WhatsApp reply
+</code></pre>
+<ul>
+<li><strong>Frontend:</strong> none — WhatsApp itself is the interface.</li>
+<li><strong>Backend/API:</strong> webhook receiver + agent orchestrator.</li>
+<li><strong>Storage:</strong> small catalog table + per-thread conversation state.</li>
+<li><strong>External APIs:</strong> WhatsApp Cloud API, YouCam Beauty MCP server.</li>
+<li><strong>AI layer:</strong> intent classification, reply phrasing, follow-up-question judgment.</li>
+<li><strong>Core logic:</strong> catalog matching, state transitions, escalation rules.</li>
+<li><strong>Boundary questions:</strong> the catalog matcher is authoritative on <em>what</em> gets recommended; the agent is authoritative on <em>how</em> it's said, never the reverse. A failed YouCam call degrades to a text-only reply rather than blocking the conversation.</li>
+</ul>
+<h2>Phase 5 — Define Data Contracts</h2>
+<ul>
+<li><strong>Input:</strong> webhook payload — sender ID, message text, optional image URL.</li>
+<li><strong>Output:</strong> WhatsApp message — text plus optional image URL.</li>
+<li><strong>Error schema:</strong> <code>{state, error_code, customer_facing_message, escalate: bool}</code></li>
+<li><strong>External API assumptions:</strong> skin-tone call returns tone/undertone JSON; VTO call returns a result URL or one of the documented preprocess/engine error codes.</li>
+<li><strong>Validation rule:</strong> an image that fails YouCam's own documented checks gets surfaced to the customer in plain language (&quot;could you send a photo facing forward?&quot;), not a raw error code.</li>
+</ul>
+<h2>Phase 6 — Model States</h2>
+<pre><code>RECEIVED -&gt; CLASSIFIED -&gt; (GENERAL_REPLY | ESCALATED | AWAITING_PHOTO)
+
+AWAITING_PHOTO -&gt; ANALYZING -&gt; MATCHING -&gt; RENDERING -&gt; SENT
+  -&gt; (CONVERTED | ALTERNATIVE_REQUESTED -&gt; back to MATCHING | ESCALATED)
+</code></pre>
+<ul>
+<li><strong>Failure states:</strong> <code>ANALYZING_FAILED</code> (bad photo) → one retake request. <code>RENDERING_FAILED</code> → fall back to text-only recommendation rather than stalling.</li>
+<li><strong>Terminal states:</strong> <code>CONVERTED</code>, <code>ESCALATED</code>, <code>GENERAL_REPLY</code>, <code>ABANDONED</code>.</li>
+</ul>
+<h2>Phase 7 — Build the Smallest Real Vertical Slice</h2>
+<ul>
+<li><strong>Input:</strong> one hardcoded selfie, a 5-item hardcoded catalog.</li>
+<li><strong>Processing:</strong> skin-tone call → deterministic match → VTO render.</li>
+<li><strong>Output:</strong> one WhatsApp message, text plus image, sent to your own test number.</li>
+<li><strong>Definition of done:</strong> the full round trip works once, manually triggered — no webhook handler, no multi-turn logic yet.</li>
+<li><strong>Avoid premature work:</strong> no conversation persistence, no escalation logic, no FAQ path until this single path is proven.</li>
+</ul>
+<h2>Phase 8 — Separate Deterministic Logic From AI</h2>
+<ul>
+<li><strong>Deterministic (code):</strong> catalog scoring/matching, state transitions, escalation rules, image pre-validation, message formatting.</li>
+<li><strong>AI:</strong> classifying what the customer is asking, phrasing the reply, deciding whether a follow-up question is needed.</li>
+<li><strong>Decision:</strong> AI only where the input is genuinely ambiguous (language, intent). Anything with a correct answer — which SKU, when to escalate — stays in code, never left to the model's judgment.</li>
+</ul>
+<h2>Phase 9 — Design Failure Paths Early</h2>
+<p>Generic failures from the checklist: API timeout, empty result, malformed response, invalid input, AI timeout/rate limit, bad AI output, missing fields, network failure, deployment failure.</p>
+<p><strong>Project-specific failures:</strong></p>
+<ol>
+<li><strong>Customer sends a screenshot or a non-selfie image.</strong> YouCam's preprocess check rejects it (<code>error_pose</code> / <code>error_invalid_ref</code>). Fallback: ask once for a real photo facing forward; if it fails twice, skip the photo and offer general best-sellers instead of stalling the conversation.</li>
+<li><strong><code>error_editing_failed</code></strong> — the render comes back too similar to the source image. Fallback: send the text recommendation alone, without a preview image, rather than blocking or retrying indefinitely.</li>
+<li><strong>WhatsApp's 24-hour reply window closes.</strong> If a customer goes quiet mid-flow and returns after 24 hours, free-form replies are no longer allowed — only pre-approved templates. Fallback: a short approved &quot;we're still here, want to continue?&quot; template to reopen the window.</li>
+</ol>
+<p><strong>General failure rules:</strong></p>
+<ul>
+<li>API timeout → send a &quot;still checking&quot; holding message rather than going silent.</li>
+<li>AI misclassification (complaint vs. personalization question) → default to escalation when uncertain, never the reverse.</li>
+<li>Rate limit hit (250 msgs/24hr on the test number) → track count and degrade gracefully rather than crash.</li>
+</ul>
+<h2>Phase 11 — Test the Claim, Not Just the Code</h2>
+<table>
+<thead>
+<tr>
+<th>Feature</th>
+<th>Claim</th>
+<th>Test</th>
+<th>Result</th>
+<th>Evidence</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Round trip</td>
+<td>Message → analysis → match → render → reply, in one thread</td>
+<td>Send a real personalization message + selfie to the test number</td>
+<td>TBD — needs real credentials + network access Ken has, Claude doesn't</td>
+<td>Webhook logs, message timestamps</td>
+</tr>
+<tr>
+<td>Error fallback</td>
+<td>Each of the 15 kill-test images returns its documented code + a specific fallback message</td>
+<td>Submit all 15 pre-selected bad images</td>
+<td>TBD</td>
+<td>Image → code → fallback-message log</td>
+</tr>
+<tr>
+<td>Escalation routing</td>
+<td>Complaint / human-ask / personalization messages route correctly</td>
+<td>Run a fixed 10-message test set through the classifier</td>
+<td>TBD</td>
+<td>Classification log vs. expected label</td>
+</tr>
+<tr>
+<td>Zero-cost general path</td>
+<td>General questions never trigger a YouCam call</td>
+<td>Send 5 general questions, inspect API logs</td>
+<td>TBD</td>
+<td>API call count log</td>
+</tr>
+<tr>
+<td>Graceful render failure</td>
+<td>A failed VTO render still sends a text-only recommendation, no stall</td>
+<td>Force an <code>error_editing_failed</code> case</td>
+<td>TBD</td>
+<td>Conversation log</td>
+</tr>
+<tr>
+<td>Polling loop stops at the 30s cap</td>
+<td>A stuck &quot;running&quot; task doesn't poll forever</td>
+<td>Mock the API returning &quot;running&quot; indefinitely, count calls</td>
+<td><strong>PASS</strong></td>
+<td><code>test_logic.py</code>, run in this project</td>
+</tr>
+<tr>
+<td>Documented error codes raise correctly</td>
+<td>An &quot;error&quot; status maps to the right code, not swallowed</td>
+<td>Mock a documented error response</td>
+<td><strong>PASS</strong></td>
+<td><code>test_logic.py</code>, run in this project</td>
+</tr>
+<tr>
+<td>Catalog matching is deterministic</td>
+<td>Same input always produces the same, non-empty match</td>
+<td>Run matcher against known hex values</td>
+<td><strong>PASS</strong></td>
+<td><code>test_logic.py</code>, run in this project</td>
+</tr>
+</tbody>
+</table>
+<p>Result cells only get filled in from an actual run — never from assumption. The three PASS rows are genuinely executed (6/6 tests passing) — they cover the client's <em>logic</em>, not the <em>real</em> YouCam/WhatsApp round trip, which needs live credentials and network access neither of us has run yet.</p>
+<h2>Phase 12 — Evaluate AI With Known Examples</h2>
+<ul>
+<li><strong>Evaluation set:</strong> ~25 labeled test messages spanning all three categories (personalization, general, escalation), including edge cases: sarcasm, mixed intent in one message, typos, and code-switched phrasing (English mixed with Pidgin or other local phrasing).</li>
+<li><strong>Expected outputs prepared:</strong> Yes — each message gets a ground-truth label before the classifier sees it.</li>
+<li><strong>Actual outputs recorded:</strong> Not yet — TBD once the classifier exists.</li>
+<li><strong>Accuracy metric:</strong> Overall routing accuracy, plus escalation recall tracked separately and held to a higher bar (a missed complaint is worse than an over-cautious escalation).</li>
+<li><strong>Failure categories:</strong> ambiguous phrasing, code-switched messages, very short/no-context messages, multi-intent messages.</li>
+</ul>
+<p>Rule: one successful demo message is not evidence the classifier works — only the evaluation set is.</p>
+<h2>Phase 13 — Observe the System</h2>
+<p>Events to log for every conversation:</p>
+<ul>
+<li><code>MESSAGE_RECEIVED</code> — webhook payload arrives</li>
+<li><code>INTENT_CLASSIFIED</code> — category assigned (personalization / general / escalation)</li>
+<li><code>PHOTO_REQUESTED</code> / <code>PHOTO_RECEIVED</code></li>
+<li><code>SKIN_ANALYSIS_CALLED</code> → <code>_SUCCEEDED</code> or <code>_FAILED</code> (with the YouCam error code)</li>
+<li><code>CATALOG_MATCH_COMPUTED</code> — which SKU, why</li>
+<li><code>VTO_RENDER_CALLED</code> → <code>_SUCCEEDED</code> or <code>_FAILED</code> (with error code)</li>
+<li><code>FALLBACK_TRIGGERED</code> — which fallback, why</li>
+<li><code>ESCALATED</code> — trigger reason (explicit ask / complaint / not satisfied)</li>
+<li><code>REPLY_SENT</code></li>
+<li><code>RATE_LIMIT_HIT</code> — approaching the 250 msgs/24hr test-number cap</li>
+</ul>
+<p>Doubles as the debugging trail now and the audit trail for judges later (see Phase 19).</p>
+<h2>Phase 14 — Plan for External Dependency Failure</h2>
+<table>
+<thead>
+<tr>
+<th>Dependency</th>
+<th>Provides</th>
+<th>Rate limit</th>
+<th>Timeout / retry</th>
+<th>Fallback</th>
+<th>Failure behavior</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>WhatsApp Cloud API</td>
+<td>Send/receive messages</td>
+<td>250 msgs/24hr (test number)</td>
+<td>1 retry after short backoff</td>
+<td>None — if this is down, nothing can be sent</td>
+<td>Log and drop; rely on customer re-sending</td>
+</tr>
+<tr>
+<td>YouCam Skin-Tone Analysis</td>
+<td>Undertone/Fitzpatrick data</td>
+<td>Free-trial units (limited)</td>
+<td>Async poll every 1–2s, cap at ~15 attempts (30s) before failing</td>
+<td>Ask for a retake once, then fall back to general best-sellers with no tone data</td>
+<td>Log <code>SKIN_ANALYSIS_FAILED</code> with reason</td>
+</tr>
+<tr>
+<td>YouCam VTO Render</td>
+<td>Confirmation image</td>
+<td>Free-trial units (limited)</td>
+<td>Same async poll pattern, same 30s cap</td>
+<td>Text-only recommendation, no image (Phase 9)</td>
+<td>Log <code>VTO_RENDER_FAILED</code> with error code</td>
+</tr>
+</tbody>
+</table>
+<p>No dependency gets an automatic retry loop that could silently burn through free-trial units — one retry, then an explicit fall into the fallback path.</p>
+<h2>Phase 15 — Engineering Decision Log</h2>
+<p><strong>Decision:</strong> Scope V1 to WhatsApp only, not Instagram.
+<strong>Reason:</strong> Instagram's messaging API has more review friction; prove one complete path before expanding.
+<strong>Trade-off:</strong> Instagram-only merchants aren't covered in the demo.
+<strong>Revisit if:</strong> the WhatsApp path is solid with real time left before the deadline.</p>
+<p><strong>Decision:</strong> Rejected the &quot;Catalog Render-Risk Auditor&quot; idea in favor of the SMB sales assistant.
+<strong>Reason:</strong> the sponsor API already returns structured error codes for bad images, undermining that idea's novelty; the assistant clears the agent-necessity test better and matches real domain experience.
+<strong>Trade-off:</strong> gives up a B2B/inclusivity framing similar to past winners.
+<strong>Revisit if:</strong> the WhatsApp integration turns out to be infeasible — not expected.</p>
+<p><strong>Decision:</strong> Add a VTO confirmation render after skin-tone matching, rather than one API call alone.
+<strong>Reason:</strong> closes the purchase-confidence gap the return-rate research identified, not just padding API usage.
+<strong>Trade-off:</strong> adds latency (two async calls instead of one) and doubles unit cost per interaction.
+<strong>Revisit if:</strong> real-world latency testing shows unacceptable reply times.</p>
+<p><strong>Decision:</strong> Catalog matching is deterministic code, not an AI call.
+<strong>Reason:</strong> it has a correct answer — Phase 8's rule that code enforces rules, AI handles ambiguity.
+<strong>Trade-off:</strong> requires maintaining explicit match-scoring logic instead of just prompting a model.
+<strong>Revisit if:</strong> nothing currently anticipated.</p>
+<h2>Phase 16 — Document the Traps</h2>
+<p><strong>Problem:</strong> Considered building a B2B tool to predict/audit VTO render failures before they happen.
+<strong>Assumption:</strong> The sponsor API would fail silently with no explanation, so a pre-flight auditor would add real value.
+<strong>Reality:</strong> The Clothes Changer API already returns specific, structured preprocess error codes explaining exactly why an image failed.
+<strong>Solution:</strong> Abandoned the idea before writing any code; redirected to the SMB sales assistant.
+<strong>Lesson:</strong> Always read the actual API docs before assuming a gap exists — Phase 6's &quot;verify before designing&quot; rule exists exactly for this.</p>
+<p>(This section grows once building starts — expected to stay short until then.)</p>
+<h2>Phase 17 — Project State (snapshot — overwrite, don't append)</h2>
+<ul>
+<li><strong>What works?</strong> Nothing yet — this is still pure planning, no code written.</li>
+<li><strong>What doesn't work?</strong> Everything — nothing has been built.</li>
+<li><strong>Recently changed:</strong> Worksheet phases 1–16 completed.</li>
+<li><strong>Current blocker:</strong> None — ready to finish the remaining phases, then run the day-1 kill test.</li>
+<li><strong>Next task:</strong> Complete Phases 18+ (guardrails, reviews, deployment planning), then execute the WhatsApp &lt;-&gt; YouCam round-trip kill test.</li>
+<li><strong>Known risks:</strong> WhatsApp &lt;-&gt; YouCam round trip untested; real-world selfie failure rate unknown; curated catalog breadth unverified against varied skin tones.</li>
+<li><strong>Last verified deployment:</strong> None.</li>
+</ul>
+<h2>Phase 18 — AI Coding Agent Guardrail Template</h2>
+<p>Paste this into every task handed to a coding agent, filling in TASK/ACCEPTANCE/TESTS per piece of work:</p>
+<pre><code>PROJECT: Umber — WhatsApp sales assistant for small retailers (YouCam hackathon submission)
+GOAL: [specific to the task at hand]
+CONSTRAINTS: WhatsApp Cloud API test mode only (5 verified recipients,
+  250 msgs/24hr); YouCam free-trial units are limited — no unnecessary
+  API calls; catalog matching must be deterministic code, never an LLM call
+ARCHITECTURE: Customer -&gt; WhatsApp Cloud API -&gt; Webhook -&gt; Agent
+  orchestrator -&gt; [YouCam MCP tools] + [Catalog matcher] -&gt; WhatsApp reply
+CURRENT STATE: [copy from Phase 17 snapshot at time of task]
+TASK: [specific to the task at hand]
+ACCEPTANCE CRITERIA: [relevant row(s) from Phase 2]
+TESTS: [relevant row(s) from Phase 11]
+EVIDENCE: [relevant event(s) from Phase 13&#39;s log list]
+DO NOT:
+  - Invent YouCam error codes beyond the documented set (error_pose,
+    error_invalid_ref, error_apply_region_mismatch, error_invalid_src,
+    error_download_image, error_nsfw_content_detected,
+    error_editing_failed, unknown_internal_error)
+  - Invent WhatsApp API endpoints or fields not in Meta&#39;s own docs
+  - Claim &#34;implemented successfully&#34; without a passing Phase 11 test
+  - Add retry loops beyond the single retry defined in Phase 14
+</code></pre>
+<h2>Phase 19 — Review AI-Generated Code (checklist)</h2>
+<ul>
+<li><strong>Correctness:</strong> Does the classifier's output map exactly to the three Phase 6 states? Does catalog matching implement real scoring, not a plausible-looking guess?</li>
+<li><strong>Architecture fit:</strong> Does the code respect the Phase 4 boundary — catalog matcher decides <em>what</em>, agent decides <em>how</em>, never reversed?</li>
+<li><strong>Security:</strong> Is the WhatsApp webhook's signature actually verified? Are customer selfies discarded after processing rather than retained? Is the YouCam token kept server-side only?</li>
+<li><strong>Reliability:</strong> Are the Phase 14 fallback rules actually implemented in code, not just described in a comment?</li>
+<li><strong>Maintainability:</strong> Is the Phase 6 state machine an explicit, named state enum — not scattered if/else logic?</li>
+<li><strong>Cost:</strong> Does the general-question path genuinely make zero YouCam calls, verified against the Phase 11 test row?</li>
+<li><strong>Performance:</strong> Does the polling loop stop at the 30s cap from Phase 14, rather than spinning indefinitely?</li>
+<li><strong>Testing:</strong> Does every Phase 11 row have a real executed test behind it, not just a plan?</li>
+</ul>
+<h2>Phase 20 — Adversarial Review Angles</h2>
+<ul>
+<li><strong>Engineer:</strong> Does the async polling pattern hold up under real network jitter? Is conversation state actually persisted across separate stateless webhook calls, or does it silently reset?</li>
+<li><strong>Security:</strong> Could someone spam fake selfies to burn through the limited free-trial units? Could someone probe the <code>error_nsfw_content_detected</code> path repeatedly? Is the webhook reachable by anyone, or only Meta-signed requests?</li>
+<li><strong>Reliability:</strong> If both YouCam calls fail for a run of customers in a row, does the bot visibly degrade, or quietly become useless without anyone noticing?</li>
+<li><strong>Product:</strong> Would a much simpler auto-reply with a catalog link have been &quot;good enough&quot; for a real small retailer? Worth being honest here.</li>
+<li><strong>AI:</strong> Could the reply-phrasing step invent a product not in the catalog, misstate a price, or confidently claim a &quot;match&quot; when the underlying skin-tone read actually failed?</li>
+<li><strong>Judge:</strong> Can a stranger understand the engineering quality and the sponsor API's necessity within the first 60 seconds, without narration?</li>
+</ul>
+<h2>Phase 21 — Deploy Early (production smoke test)</h2>
+<ul>
+<li><input disabled="" type="checkbox"> Webhook endpoint reachable on a public URL (not a local tunnel that dies when the laptop sleeps)</li>
+<li><input disabled="" type="checkbox"> Meta's webhook verification handshake succeeds</li>
+<li><input disabled="" type="checkbox"> Environment variables (YouCam token, WhatsApp token) work in the deployed environment, not just local <code>.env</code></li>
+<li><input disabled="" type="checkbox"> YouCam API calls succeed from the deployed server itself</li>
+<li><input disabled="" type="checkbox"> Classification logic behaves the same in production as in local testing</li>
+<li><input disabled="" type="checkbox"> Fallbacks actually trigger on failure — verified, not assumed</li>
+<li><input disabled="" type="checkbox"> Full flow tested from a real phone sending a real WhatsApp message</li>
+<li><input disabled="" type="checkbox"> The main journey (personalization question → photo → recommendation) works end-to-end, once, for real</li>
+</ul>
+<p>Get this checklist running against a real deployed URL well before Nov 2 — not the night before.</p>
+<h2>Phase 22 — Build the Evidence Surface</h2>
+<table>
+<thead>
+<tr>
+<th>Evidence type</th>
+<th>What it is here</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>Screenshots</td>
+<td>Real WhatsApp thread showing the full flow: question → selfie request → recommendation → VTO image</td>
+</tr>
+<tr>
+<td>Demo video</td>
+<td>The required 2–3 min submission video, showing live API calls</td>
+</tr>
+<tr>
+<td>Test output</td>
+<td>Phase 11's evidence log, filled in with actual results</td>
+</tr>
+<tr>
+<td>API responses</td>
+<td>Raw JSON from real skin-tone and VTO calls, saved as reference samples</td>
+</tr>
+<tr>
+<td>Logs</td>
+<td>A real captured session using the Phase 13 event list</td>
+</tr>
+<tr>
+<td>Evaluation results</td>
+<td>Phase 12's classifier evaluation run, with actual accuracy/recall numbers</td>
+</tr>
+<tr>
+<td>Architecture diagram</td>
+<td>The flow diagrams already built in this project</td>
+</tr>
+<tr>
+<td>Performance measurements</td>
+<td>Real round-trip latency across several runs</td>
+</tr>
+<tr>
+<td>Production URL</td>
+<td>Deployed webhook + a small status page, if judges need something to open directly</td>
+</tr>
+</tbody>
+</table>
+<p><strong>Evidence location:</strong> <code>/evidence</code> folder in the repo, with subfolders <code>screenshots/</code>, <code>logs/</code>, <code>eval-results/</code>, <code>api-samples/</code>.</p>
+<h2>Phase 23 — README as an Engineering Argument (outline)</h2>
+<ul>
+<li><strong>Problem</strong> → Phase 1</li>
+<li><strong>Why it matters</strong> → response-time/conversion stats already gathered</li>
+<li><strong>What was built</strong> → WhatsApp agent + YouCam skin-tone + VTO confirmation pipeline</li>
+<li><strong>Architecture</strong> → Phase 4 diagram</li>
+<li><strong>How it works</strong> → Phase 6 state machine</li>
+<li><strong>AI role</strong> → intent classification + reply phrasing (Phase 8)</li>
+<li><strong>Deterministic logic</strong> → catalog matching, escalation rules (Phase 8)</li>
+<li><strong>Engineering decisions</strong> → Phase 15 decision log</li>
+<li><strong>Testing</strong> → Phase 11 + Phase 12 results</li>
+<li><strong>Evidence</strong> → Phase 22 evidence folder</li>
+<li><strong>Limitations</strong> → WhatsApp only, small curated catalog, test-mode API limits, no payment flow</li>
+<li><strong>Future work</strong> → Instagram, larger catalog, live inventory sync, template-based re-engagement outside the 24hr window</li>
+</ul>
+<h2>Phase 24 — Be Honest About Limitations</h2>
+<ol>
+<li>Only tested against a WhatsApp test number with 5 verified recipients — not validated against real, unpredictable customers at scale.</li>
+<li>The curated ~15–20 item catalog is a demo-scale proxy, not a real merchant's full inventory.</li>
+<li>Skin-tone accuracy on real-world selfies (bad lighting, odd angles) is untested — the kill test only confirms failure <em>detection</em> works, not that successful reads are accurate.</li>
+<li>No payment or checkout — the agent recommends, it can't close the sale.</li>
+<li>Free-trial API units are finite; sustained real-world usage would need a paid plan not yet costed.</li>
+</ol>
+<p>Rule: the demo video and Devpost story can only claim what was actually shown working — not what the architecture theoretically supports.</p>
+<h2>Phase 25 — Keep Complexity Proportional to Risk</h2>
+<p><strong>Full database (e.g. Postgres) for conversation state?</strong></p>
+<ul>
+<li>Problem it'd solve: persisting state across restarts.</li>
+<li>Risk reduced: losing context mid-demo if the server restarts.</li>
+<li>Simpler alternative: SQLite or an in-memory store is enough at this scale.</li>
+<li><strong>Decision: skip Postgres. Use SQLite.</strong></li>
+</ul>
+<p><strong>Message queue (Redis/Celery) for async polling?</strong></p>
+<ul>
+<li>Problem it'd solve: decoupling the webhook response from long-running YouCam polling.</li>
+<li>Risk reduced: webhook timeout on slow API calls.</li>
+<li>Simpler alternative: a plain async function with the 30s poll cap (Phase 14) already handles this.</li>
+<li><strong>Decision: skip the queue.</strong></li>
+</ul>
+<p><strong>Multi-agent framework (LangGraph, CrewAI, etc.)?</strong></p>
+<ul>
+<li>Problem it'd solve: coordinating complex multi-agent behavior.</li>
+<li>Risk reduced: none significant — the flow is a 3-way branch plus a linear pipeline.</li>
+<li>Simpler alternative: a single well-structured orchestrator function calling the YouCam MCP tools directly.</li>
+<li><strong>Decision: skip the framework.</strong></li>
+</ul>
+<h2>Phase 26 — Final Project Completion Checklist</h2>
+<p><strong>Product</strong></p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Problem clearly defined</li>
+<li><input checked="" disabled="" type="checkbox"> Target user clear</li>
+<li><input checked="" disabled="" type="checkbox"> V1 scope clear</li>
+<li><input checked="" disabled="" type="checkbox"> Non-goals documented</li>
+<li><input disabled="" type="checkbox"> Core user journey works <em>(not built yet)</em></li>
+</ul>
+<p><strong>Engineering</strong></p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> Architecture understood</li>
+<li><input checked="" disabled="" type="checkbox"> Data contracts defined</li>
+<li><input checked="" disabled="" type="checkbox"> Responsibilities separated</li>
+<li><input checked="" disabled="" type="checkbox"> Important states explicit</li>
+<li><input checked="" disabled="" type="checkbox"> External dependencies documented</li>
+<li><input disabled="" type="checkbox"> Failure paths exist <em>(designed, not implemented)</em></li>
+</ul>
+<p><strong>AI</strong></p>
+<ul>
+<li><input checked="" disabled="" type="checkbox"> AI is actually necessary</li>
+<li><input checked="" disabled="" type="checkbox"> AI responsibilities are narrow</li>
+<li><input checked="" disabled="" type="checkbox"> Deterministic rules remain deterministic</li>
+<li><input disabled="" type="checkbox"> AI failures handled <em>(planned, not implemented)</em></li>
+<li><input disabled="" type="checkbox"> AI output validated</li>
+<li><input disabled="" type="checkbox"> Evaluation examples exist <em>(designed, not run)</em></li>
+</ul>
+<p><strong>Testing</strong> — all pending, nothing executed yet</p>
+<ul>
+<li><input disabled="" type="checkbox"> Happy path tested</li>
+<li><input disabled="" type="checkbox"> Invalid input tested</li>
+<li><input disabled="" type="checkbox"> Dependency failure tested</li>
+<li><input disabled="" type="checkbox"> Rate limits considered</li>
+<li><input disabled="" type="checkbox"> Production smoke test completed</li>
+<li><input disabled="" type="checkbox"> Important claims have evidence</li>
+</ul>
+<p><strong>Documentation</strong></p>
+<ul>
+<li><input disabled="" type="checkbox"> README written <em>(outline exists, not drafted)</em></li>
+<li><input disabled="" type="checkbox"> Architecture explained <em>(diagram exists, not in README yet)</em></li>
+<li><input checked="" disabled="" type="checkbox"> Important decisions documented</li>
+<li><input checked="" disabled="" type="checkbox"> Limitations documented</li>
+<li><input disabled="" type="checkbox"> Evidence included</li>
+<li><input checked="" disabled="" type="checkbox"> Future improvements identified</li>
+</ul>
+<p><strong>Career/Presentation</strong> — none yet, all downstream of building</p>
+<ul>
+<li><input disabled="" type="checkbox"> Live URL / GitHub repo / demo video / clean README / architecture diagram in place</li>
+</ul>
+<hr>
+<h2>Reference notes from research</h2>
+<ul>
+<li>WhatsApp Cloud API gives a free test number instantly (no business verification needed); 5 verified recipients, 250 free msgs/24hr; free-form replies allowed within 24hrs of a customer-initiated message.</li>
+<li>YouCam Clothes Changer API (task type <code>cloth-v4</code>) documented preprocess errors: <code>error_pose</code>, <code>error_invalid_ref</code>, <code>error_apply_region_mismatch</code>, <code>error_invalid_src</code>, size errors. Engine errors: <code>error_download_image</code>, <code>error_nsfw_content_detected</code>, <code>error_editing_failed</code>, <code>unknown_internal_error</code>. 2 units per successful call.</li>
+<li>YouCam Facial Color Tones Analyzer (task type <code>skin-tone-analysis</code>, base URL <code>https://yce-api-01.makeupar.com</code>) — confirmed real endpoint used for the actual product-matching signal (hex <code>skin_color</code>, <code>eye_color</code>, <code>lip_color</code>, <code>hair_color</code>). Errors are free; a <strong>successful</strong> call costs <strong>20 units</strong>.</li>
+<li><strong>Critical constraint found while building:</strong> with only 40 free-trial units total and skin-tone-analysis costing 20 units per successful call, only ~2 successful live analyses fit in the free tier. Error-path testing (the kill test) is free since failed tasks aren't billed — but don't burn successful calls casually; capture and reuse one real result while testing the rest of the pipeline.</li>
+<li>Rejected idea: &quot;Catalog Render-Risk Auditor&quot; — the API already returns structured error codes for bad images, undercutting that idea's novelty.</li>
+<li>Prior identical-format hackathon (July–Aug 2026): 1,279 registered, 238 submitted (~19%), 5 winners. All winners combined 2+ YouCam APIs non-trivially and leaned into trust/accuracy/inclusivity framing rather than plain recommendation.</li>
+</ul>
+<h2>Architecture &amp; Repository Layout</h2>
+<h3>Component flow (what talks to what)</h3>
+<pre><code>Customer (WhatsApp)
+   |  message / selfie
+   v
+WhatsApp Cloud API --webhook--&gt; app/main.py  (verify signature, parse payload)
+                                   |
+                                   v
+                          app/orchestrator.py  (state machine, Phase 6)
+                           |        |         |
+             classifier.py |        |         | store.py (SQLite: per-thread state)
+             (AI: intent)  |        |
+                           v        v
+              clients/youcam.py   catalog/matcher.py
+              (skin-tone-analysis (deterministic code)
+               + cloth-v4 VTO)
+                           \        /
+                            v      v
+                    clients/whatsapp.py --&gt; reply (text + image)
+                                   |
+                                   v
+                          events.py (Phase 13 log)  -&gt;  evidence/logs/
+</code></pre>
+<ul>
+<li><strong>YouCam integration as built:</strong> a direct REST client (<code>skin-tone-analysis</code> and <code>cloth-v4</code> task types, verified against the docs). Phase 4 mentioned the YouCam MCP server; that remains an alternative, not currently used.</li>
+<li><strong>Authority:</strong> <code>catalog/matcher.py</code> decides <em>what</em> is recommended; the agent layer decides <em>how</em> it's worded (Phase 4 boundary).</li>
+</ul>
+<h3>Target repository layout</h3>
+<pre><code>umber/
+├── README.md                 # engineering argument (Phase 23)
+├── SETUP.md                  # credentials + how to run the kill test
+├── requirements.txt
+├── .env.example              # YOUCAM_API_KEY, WHATSAPP_* vars (never commit real values)
+├── app/
+│   ├── main.py               # FastAPI app: GET/POST /webhook            (Stage 1)
+│   ├── config.py             # env var loading
+│   ├── states.py             # explicit state enum (Phase 6)             (Stage 2/5)
+│   ├── classifier.py         # intent: personalization/general/escalate  (Stage 2)
+│   ├── orchestrator.py       # routing + state transitions               (Stage 3-5)
+│   ├── store.py              # SQLite conversation state                 (Stage 5)
+│   ├── events.py             # Phase 13 event logging                    (Stage 6)
+│   ├── clients/
+│   │   ├── whatsapp.py       # was whatsapp_client.py
+│   │   └── youcam.py         # was youcam_client.py
+│   └── catalog/
+│       ├── matcher.py        # was catalog.py
+│       └── items.json        # 15-20 curated SKUs (Phase 3 risk)
+├── assets/garments/          # reference garment photos for VTO
+├── tests/
+│   ├── test_logic.py         # existing mocked tests (6/6 passing)
+│   ├── test_webhook.py       # Stage 1
+│   ├── test_classifier.py    # Stage 2
+│   └── eval_set.json         # Phase 12 labeled messages
+├── scripts/
+│   └── kill_test.py          # day-1 vertical slice
+├── evidence/                 # Phase 22
+│   ├── screenshots/  logs/  eval-results/  api-samples/
+└── docs/
+    ├── worksheet.md          # this document
+    └── architecture.md       # diagrams exported from the flows above
+</code></pre>
+<p><strong>Current state:</strong> the code so far is flat (<code>youcam_client.py</code>, <code>catalog.py</code>, <code>whatsapp_client.py</code>, <code>kill_test.py</code>, <code>test_logic.py</code>). Moving into the layout above is a rename-and-fix-imports step, best done at the start of Stage 1 while nothing depends on the old paths.</p>
+<hr>
+<h2>Execution Stages</h2>
+<p><strong>Operating rule:</strong> the AI coding agent writes all code. Claude supplies prompts, instructions and direction only, and reviews the agent's reported results.</p>
+<p>Planned order: Stage 1 (webhook plumbing) → Stage 2 (intent classification) → Stage 3 (skin-tone analysis + selfie request) → Stage 4 (catalog match + VTO render) → Stage 5 (escalation + state persistence) → Stage 6 (logging/deployment). Each stage isolates one risk before adding the next.</p>
+<h3>Stage 1 — Repository restructure + WhatsApp webhook plumbing (in progress)</h3>
+<pre><code>PROJECT: Umber — WhatsApp sales assistant for small retailers (YouCam hackathon submission)
+
+GOAL: (1) Restructure the repository into the target layout defined in this
+  worksheet&#39;s &#34;Architecture &amp; Repository Layout&#34; section. (2) Audit the
+  existing scaffold. (3) Stand up a webhook server that can receive
+  WhatsApp messages via Meta&#39;s Cloud API and reply with a fixed static
+  message. Transport only — no AI, no YouCam calls in this stage.
+
+CONSTRAINTS:
+  - Python with FastAPI. Keep dependencies minimal.
+  - WhatsApp Cloud API test mode only (5 verified recipients, 250 msgs/24hr).
+  - All secrets come from environment variables. Never hard-code or commit
+    real values. Fail fast with a clear message if a required variable is missing.
+  - You are the only author of code in this project. Do not ask for code
+    from anyone else; ask questions in words if something is unclear.
+
+ARCHITECTURE: Customer -&gt; WhatsApp Cloud API -&gt; Webhook -&gt; Orchestrator -&gt;
+  [YouCam client] + [Catalog matcher] -&gt; WhatsApp reply. This stage builds
+  only the &#34;Webhook&#34; box, its config, and the file moves. Follow the
+  component flow and folder layout in the worksheet exactly.
+
+CURRENT STATE: A flat scaffold exists (YouCam client, WhatsApp client,
+  catalog matcher, a kill-test script, and mocked logic tests, 6/6 passing).
+  It was written as a starting point, was never run against the real
+  networks, and contains at least one VERIFY note in the YouCam client.
+  No webhook server exists; nothing is reachable from the internet.
+
+TASK:
+  1. Restructure: move existing files into the target layout, fix imports,
+     and confirm the existing mocked tests still pass unchanged in behavior.
+  2. Audit: read every existing file. Produce a written list of assumptions
+     that are not backed by official documentation. Check the WhatsApp Graph
+     API version currently in use against Meta&#39;s current documentation.
+     Report findings; do not change YouCam client logic in this stage.
+  3. Webhook verification route: implement Meta&#39;s subscription handshake
+     using the verify-token environment variable; reject mismatches.
+  4. Webhook receive route: verify Meta&#39;s request signature against the raw
+     request body using the app secret, using a constant-time comparison,
+     and reject invalid or missing signatures BEFORE parsing the payload.
+     Then handle inbound messages: extract sender and text, send one fixed
+     acknowledgment through the existing WhatsApp client. Status updates and
+     other non-message events must be accepted quietly (respond success, send
+     nothing). Respond quickly.
+  5. Logging: emit MESSAGE_RECEIVED and REPLY_SENT events in the format
+     already used by the kill-test script; log signature rejections too.
+  6. Tests: add mocked tests covering valid signature, invalid signature,
+     missing signature header, status-update payload, and the handshake
+     (success and failure). Existing tests must still pass.
+  7. Docs: update SETUP.md with the steps to run the server locally, expose
+     it publicly for testing, and register the webhook in Meta&#39;s developer
+     console. Add the two new environment variables to the example env file.
+
+ACCEPTANCE CRITERIA:
+  - Repository matches the target layout; old flat paths are gone
+  - Handshake succeeds for a correct token and returns 403 otherwise
+  - Invalid/missing signature -&gt; 403 and no message is sent
+  - Valid signed message -&gt; exactly one fixed reply sent
+  - Status updates -&gt; success response, no reply
+  - All tests pass, old and new
+
+TESTS: run the full test suite and paste the real output. Do not describe
+  results you did not run.
+
+EVIDENCE: save the test output under evidence/logs. Real-world verification
+  (handshake in Meta&#39;s console, a real WhatsApp round trip) is done by the
+  human; mark those items UNKNOWN until the human confirms them.
+
+DO NOT:
+  - Add any YouCam calls, conversation state, intent classification, or
+    catalog logic in this stage
+  - Skip or weaken signature verification for any reason
+  - Invent endpoints, fields, headers or algorithms; if unsure, read the
+    official docs or mark the item UNKNOWN
+  - Claim &#34;implemented successfully&#34; without a passing test run shown
+  - Add databases, queues or agent frameworks
+
+REPORT BACK: finish with (a) files created/moved/changed, (b) actual test
+  output, (c) audit findings, (d) every item still UNKNOWN, (e) any
+  questions for the human.
+</code></pre>
+<h2>Code status</h2>
+<p>A working scaffold exists (<code>youcam_client.py</code>, <code>catalog.py</code>, <code>whatsapp_client.py</code>, <code>kill_test.py</code>, <code>test_logic.py</code>). The client logic (polling cap, error handling, deterministic matching) has been tested with mocked responses — 6/6 passing. The real network round trip against <code>yce-api-01.makeupar.com</code> and <code>graph.facebook.com</code> has <strong>not</strong> been run — that requires your own API key and WhatsApp credentials, and access to domains outside what Claude's sandbox can reach. One item in the client is marked <code>VERIFY</code>: the exact success-response shape for <code>cloth-v4</code> wasn't visible in what was fetched from the docs — confirm the real field name before trusting <code>render_clothes_vto</code>'s return value.</p>
+
+</body></html>

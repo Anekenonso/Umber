@@ -231,3 +231,21 @@ async def receive_webhook(
 
     # Meta expects 200 OK fast
     return {"status": "ok"}
+
+
+@app.get("/sessions/escalations")
+async def get_escalated_sessions():
+    """List open customer conversations flagged for human staff review."""
+    from app.store import store
+    escalations = store.list_escalations()
+    return {"count": len(escalations), "escalations": escalations}
+
+
+@app.post("/sessions/{sender_id}/resolve")
+async def resolve_session_escalation(sender_id: str):
+    """Staff resolves escalation, restoring conversation to active state."""
+    from app.store import store
+    from app.states import ConversationState
+    updated_session = store.resolve_escalation(sender_id, next_state=ConversationState.GENERAL_REPLY)
+    log_event("ESCALATION_RESOLVED", {"sender_id": sender_id, "new_state": updated_session.state.value})
+    return {"status": "resolved", "session": updated_session.to_dict()}

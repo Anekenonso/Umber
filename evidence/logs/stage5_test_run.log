@@ -1,0 +1,51 @@
+============================= test session starts =============================
+platform win32 -- Python 3.12.10, pytest-9.1.1, pluggy-1.6.0 -- C:\Users\USER\AppData\Local\Programs\Python\Python312\python.exe
+cachedir: .pytest_cache
+rootdir: C:\Users\USER\Documents\Software Development\AI SaaS\Umber
+plugins: anyio-4.14.2, asyncio-1.4.0
+asyncio: mode=Mode.STRICT, debug=False, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
+collecting ... collected 41 items
+
+tests/test_classifier.py::test_eval_set_accuracy_and_escalation_recall PASSED [  2%]
+tests/test_classifier.py::test_explicit_human_agent_escalations PASSED   [  4%]
+tests/test_classifier.py::test_complaint_and_billing_escalations PASSED  [  7%]
+tests/test_classifier.py::test_mixed_intent_prioritizes_escalation PASSED [  9%]
+tests/test_classifier.py::test_pidgin_code_switching_support PASSED      [ 12%]
+tests/test_classifier.py::test_ambiguous_fallback_to_escalation PASSED   [ 14%]
+tests/test_classifier.py::test_phase6_state_mapping PASSED               [ 17%]
+tests/test_classifier.py::test_phase13_event_logging PASSED              [ 19%]
+tests/test_logic.py::test_polling_loop_stops_at_cap PASSED               [ 21%]
+tests/test_logic.py::test_documented_error_codes_raise_correctly PASSED  [ 24%]
+tests/test_logic.py::test_undocumented_error_code_fallback PASSED        [ 26%]
+tests/test_logic.py::test_catalog_matching_is_deterministic PASSED       [ 29%]
+tests/test_logic.py::test_catalog_matching_non_empty_across_tone_spectrum PASSED [ 31%]
+tests/test_logic.py::test_hex_to_rgb_conversion PASSED                   [ 34%]
+tests/test_stage3_pipeline.py::test_personalization_requests_photo_and_sets_awaiting_state PASSED [ 36%]
+tests/test_stage3_pipeline.py::test_image_in_awaiting_photo_succeeds_analysis PASSED [ 39%]
+tests/test_stage3_pipeline.py::test_image_error_pose_first_failure_requests_retake PASSED [ 41%]
+tests/test_stage3_pipeline.py::test_image_error_pose_second_failure_falls_back_to_general PASSED [ 43%]
+tests/test_stage3_pipeline.py::test_youcam_timeout_cap_triggers_graceful_fallback PASSED [ 46%]
+tests/test_stage3_pipeline.py::test_text_in_awaiting_photo_triggers_reminder_or_escalation PASSED [ 48%]
+tests/test_stage3_pipeline.py::test_stage3_webhook_end_to_end PASSED     [ 51%]
+tests/test_stage4_pipeline.py::test_stage4_full_round_trip_success PASSED [ 53%]
+tests/test_stage4_pipeline.py::test_stage4_vto_render_error_editing_failed_falls_back_to_text PASSED [ 56%]
+tests/test_stage4_pipeline.py::test_stage4_vto_timeout_falls_back_to_text PASSED [ 58%]
+tests/test_stage4_pipeline.py::test_stage4_post_recommendation_alternative_request PASSED [ 60%]
+tests/test_stage4_pipeline.py::test_stage4_post_recommendation_dissatisfaction_escalates PASSED [ 63%]
+tests/test_stage5_escalation_state.py::test_trigger_1_explicit_human_agent_escalation PASSED [ 65%]
+tests/test_stage5_escalation_state.py::test_trigger_2_complaint_and_billing_escalation PASSED [ 68%]
+tests/test_stage5_escalation_state.py::test_trigger_3_post_recommendation_dissatisfaction PASSED [ 70%]
+tests/test_stage5_escalation_state.py::test_escalation_lockout_prevents_api_calls_and_state_reset PASSED [ 73%]
+tests/test_stage5_escalation_state.py::test_sqlite_state_persistence_across_process_restarts PASSED [ 75%]
+tests/test_stage5_escalation_state.py::test_staff_escalation_listing_and_resolution_endpoints PASSED [ 78%]
+tests/test_webhook.py::test_handshake_success PASSED                     [ 80%]
+tests/test_webhook.py::test_handshake_failure_invalid_token PASSED       [ 82%]
+tests/test_webhook.py::test_handshake_failure_invalid_mode PASSED        [ 85%]
+tests/test_webhook.py::test_receive_missing_signature_header PASSED      [ 87%]
+tests/test_webhook.py::test_receive_invalid_signature PASSED             [ 90%]
+tests/test_webhook.py::test_receive_status_update_payload_quietly PASSED [ 92%]
+tests/test_webhook.py::test_receive_valid_message_sends_fixed_reply PASSED [ 95%]
+tests/test_webhook.py::test_receive_stage_2_routes_personalization_intent PASSED [ 97%]
+tests/test_webhook.py::test_receive_stage_2_routes_escalation_intent PASSED [100%]
+
+============================= 41 passed in 29.38s =============================

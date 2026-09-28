@@ -87,6 +87,23 @@ class Orchestrator:
         session: ConversationSession = store.get_session(sender_id)
 
         # -------------------------------------------------------------------
+        # Guard: Inbound message when already in ESCALATED state (Phase 2 #4)
+        # Prevents bot from resetting to automated sales loop while human agent is needed.
+        # Zero API calls made; sends gentle holding message.
+        # -------------------------------------------------------------------
+        if session.state == ConversationState.ESCALATED:
+            log_event("ESCALATED_LOCKOUT_ACTIVE", {
+                "sender": sender_id,
+                "msg_type": msg_type,
+            })
+            holding_message = (
+                "Your request has already been escalated to our store team. "
+                "A representative is reviewing this conversation and will reply to you shortly."
+            )
+            await self.whatsapp.send_text_message(sender_id, holding_message)
+            return {"status": "escalated_lockout", "state": session.state.value}
+
+        # -------------------------------------------------------------------
         # Branch 1: Inbound Image Message
         # -------------------------------------------------------------------
         if msg_type == "image":

@@ -134,3 +134,19 @@ class WhatsAppClient:
                     "error": str(e),
                 })
                 raise
+
+    async def get_media_url(self, media_id: str) -> str:
+        """Retrieve direct temporary download URL for an uploaded media ID.
+        
+        WhatsApp Cloud API requires querying GET /{media_id} to fetch the
+        temporary direct download URL for user uploaded media.
+        """
+        url = f"https://graph.facebook.com/{self.api_version}/{media_id}"
+        async with httpx.AsyncClient(timeout=10.0) as client:
+            response = await client.get(url, headers=self._get_headers())
+            response.raise_for_status()
+            data = response.json()
+            media_url = data.get("url")
+            if not media_url:
+                raise ValueError(f"No media url returned by Graph API for media_id {media_id}")
+            return media_url

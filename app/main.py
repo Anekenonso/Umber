@@ -13,21 +13,23 @@ from typing import Any, Dict, Optional
 from fastapi import FastAPI, Header, Query, Request, Response
 from fastapi.responses import PlainTextResponse
 
+from app.clients.whatsapp import WhatsAppClient
 from app.config import settings
 from app.events import log_event
-from app.clients.whatsapp import WhatsAppClient
 from app.classifier import classify_intent
 from app.states import Intent
+from app.orchestrator import Orchestrator
 
 logger = logging.getLogger("umber.webhook")
 
 app = FastAPI(
     title="Umber - WhatsApp Webhook Server",
     description="Webhook server handling Meta WhatsApp Cloud API webhooks.",
-    version="0.2.0",
+    version="0.3.0",
 )
 
 whatsapp_client = WhatsAppClient()
+orchestrator = Orchestrator(whatsapp_client=whatsapp_client)
 
 # Stage 1 static acknowledgment message
 STAGE_1_ACK_MESSAGE = "Thank you for reaching out to Umber! We have received your message."
@@ -180,8 +182,13 @@ async def receive_webhook(
                 msg_type = message.get("type", "unknown")
                 msg_id = message.get("id")
 
+                media_id = None
                 if msg_type == "text":
                     body_text = message.get("text", {}).get("body", "")
+                elif msg_type == "image":
+                    image_info = message.get("image", {})
+                    media_id = image_info.get("id")
+                    body_text = image_info.get("caption", "[image message]")
                 else:
                     body_text = f"[{msg_type} message]"
 
@@ -196,20 +203,31 @@ async def receive_webhook(
                     try:
                         if settings.stage == 1:
                             reply_text = STAGE_1_ACK_MESSAGE
-                        else:
+                            await whatsapp_client.send_text_message(
+                                to=sender_id,
+                                text=reply_text,
+                            )
+                        elif settings.stage == 2:
                             # Stage 2: Intent classification & intelligent routing
                             classification = classify_intent(body_text)
                             reply_text = STAGE_2_REPLIES.get(
                                 classification.intent,
                                 STAGE_2_REPLIES[Intent.GENERAL],
                             )
-
-                        await whatsapp_client.send_text_message(
-                            to=sender_id,
-                            text=reply_text,
-                        )
+                            await whatsapp_client.send_text_message(
+                                to=sender_id,
+                                text=reply_text,
+                            )
+                        else:
+                            # Stage 3+: Orchestrator handles state machine, photo analysis & retakes
+                            await orchestrator.handle_inbound_message(
+                                sender_id=sender_id,
+                                msg_type=msg_type,
+                                body_text=body_text,
+                                media_id=media_id,
+                            )
                     except Exception as e:
-                        logger.error(f"Failed to send reply to {sender_id}: {e}")
+                        logger.error(f"Failed to handle message for {sender_id}: {e}")
 
     # Meta expects 200 OK fast
     return {"status": "ok"}
